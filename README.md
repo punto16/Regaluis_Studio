@@ -7,7 +7,7 @@ The objective is to reach the end of the level.
 
 ## Key Features
 
-- Player can move and jump
+- Player can move and double jump
 - User can save and load position of the player
 - Textures of the map created in a very efficient way with Tiled
 - Physics of the game by Box2D

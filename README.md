@@ -1,29 +1,36 @@
-# {Project Name}
+# 2D Platformer by Regaluis Studios
 
 ## Description
 
-{project description}
+A 2D Platformer game that had as objective to create the levels using Tiled in a very efficient way. Also you can move the player to test the level and save and load its position.
+The objective is to reach the end of the level.
 
 ## Key Features
 
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
+- Player can move and jump
+- User can save and load position of the player
+- Textures of the map created in a very efficient way with Tiled
+- Physics of the game by Box2D
  
 ## Controls
 
- - {ControlsScheme}
+ - AWSD to move
+ - SPACE to jump
+ - SPACE in intro to go into the first level
+ - F1 to start from the 1st level
+ - F3 to start from the beggining of the current level
+ - F5 to save the current game state in in a xml file
+ - F6 to load the state previously saved in the xml file
+ - F9 to see the colliders
+ - F10 to go god mode (player can fly and can't die)
+ - ESC inside a level to go to the intro screen
+ - ESC in the intro screen to close the game
 
 ## Developers
 
- - {Dev01} - {Role(s)}
- - {Dev02} - {Role(s)}
- - {Dev03} - {Role(s)}
- - {Dev04} - {Role(s)}
+ - Luis González Ramírez - Coding, Art and Level Design - [_punto16_](https://github.com/punto16)
+ - Eric Regalón Martínez - Coding - [_RegalonaManda_](https://github.com/RegalonaManda)
 
 ## License
 
 This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
-
-{AdditionalLicenses}

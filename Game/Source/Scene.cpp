@@ -212,7 +212,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 	PhysBody* pbody = player->getPbody();
 
 	pbody->SetPosition(data.child("player").attribute("x").as_int(), data.child("player").attribute("y").as_int());
-	player->jumpForce = data.child("player").attribute("speed").as_int();
+	//player->jumpForce = data.child("player").attribute("speed").as_int();
 
 	return true;
 }
@@ -228,7 +228,7 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	playerNode.append_attribute("x") = (player->position.x + 16);
 	playerNode.append_attribute("y") = (player->position.y + 16);
-	playerNode.append_attribute("speed") = player->jumpForce;
+	//playerNode.append_attribute("speed") = player->jumpForce;
 	
 	return true;
 }

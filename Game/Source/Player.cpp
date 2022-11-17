@@ -56,8 +56,7 @@ bool Player::Awake() {
 	initialPosition.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
-	canJump = true;
-	jumpForce = 0;
+	jumping = false;
 
 	return true;
 }
@@ -87,6 +86,7 @@ bool Player::Start() {
 	position.x = initialPosition.x;
 	position.y = initialPosition.y;
 
+	jumpsRemaining = 2;
 
 	return true;
 }
@@ -94,53 +94,39 @@ bool Player::Start() {
 bool Player::Update()
 {
 	// L07 DONE 5: Add physics to the player - updated player position using physics
-	if (jumpForce != 0)
-	{
-		jumpForce--;
-	}
 
-	//test
+	float32 speed = 50;
 
-	int speed = 9;
-
-	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y - jumpForce);
+	b2Vec2 vel;
+	
+	//vel = b2Vec2(0, -GRAVITY_Y - jumpForce);
 
 	if (app->scene->godMode)
 	{
 		pbody->body->SetGravityScale(0);
 		vel = b2Vec2(0, 0);
 		alive = true;
+		speed = 600.0f;
 	}
 	else
 	{
+		vel = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
 		pbody->body->SetGravityScale(1);
 	}
 
 	if (alive)
 	{
-		//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			//
-			if (app->scene->godMode)
-			{
-				vel = b2Vec2(0, -speed);
+		////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
-			}
-		}
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			//
-			if (app->scene->godMode)
-			{
-				vel = b2Vec2(0, speed);
-			}
-		}
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			vel = b2Vec2(-speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
+
+			b2Vec2 force = { -speed, 0 };
+			pbody->body->ApplyForceToCenter(force, true);
+			if (vel.x < -10)
 			{
-				vel = b2Vec2(-speed, 0);
+				vel.x = -10;
 			}
-			if (!canJump)
+			if (jumping)
 			{
 				currentAnimation = &jumpLeftAnimation;
 			}
@@ -150,12 +136,13 @@ bool Player::Update()
 			}
 		}
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			vel = b2Vec2(speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
+			b2Vec2 force = { speed, 0 };
+			pbody->body->ApplyForceToCenter(force, true);
+			if (vel.x > 10)
 			{
-				vel = b2Vec2(speed, 0);
+				vel.x = 10;
 			}
-			if (!canJump)
+			if (jumping)
 			{
 				currentAnimation = &jumpRightAnimation;
 			}
@@ -164,51 +151,43 @@ bool Player::Update()
 				currentAnimation = &walkRightAnimation;
 			}
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT &&
-			app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		{
-			vel = b2Vec2(speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
+	
+		//with godmode
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->scene->godMode) {
+
+			b2Vec2 force = { 0, speed };
+			pbody->body->ApplyForceToCenter(force, true);
+			if (vel.y < -30)
 			{
-				vel = b2Vec2(speed, -speed);
+				vel.y = -30;
 			}
 		}
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT &&
-			app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		{
-			vel = b2Vec2(-speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->scene->godMode) {
+			b2Vec2 force = { 0, -speed };
+			pbody->body->ApplyForceToCenter(force, true);
+			if (vel.y > 30)
 			{
-				vel = b2Vec2(-speed, -speed);
+				vel.y = 30;
 			}
-		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT &&
-			app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			vel = b2Vec2(speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
-			{
-				vel = b2Vec2(speed, speed);
-			}
-		}
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT &&
-			app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			vel = b2Vec2(-speed, -GRAVITY_Y - jumpForce);
-			if (app->scene->godMode)
-			{
-				vel = b2Vec2(-speed, speed);
-			}
+			pbody->GetRotation();
 		}
 
-
-
-		//JUMP
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canJump && !app->scene->godMode) {// LO DEJE AQUI, HAY QUE ARREGLAR EL SALTO, QUE SOLO SALTE SI ESTA TOCANDO EL SUELO
-			jumpForce = 35;
-			canJump = false;
+		//jump
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->scene->godMode && jumpsRemaining > 0) 
+		{
+			vel.y = -20.0f;
+			jumping = true;
+			jumpsRemaining--;
 		}
-		
+
+		//set idle animation if not moving
+		if (app->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_IDLE &&
+			app->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_IDLE &&
+			!jumping)
+		{
+			currentAnimation = &idleAnimation;
+			vel.x = 0;
+		}
 
 		//Set the velocity of the pbody of the player
 		pbody->body->SetLinearVelocity(vel);
@@ -221,20 +200,14 @@ bool Player::Update()
 		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 
-		
 
-		//set idle animation if not moving
-		if (app->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_IDLE &&
-			app->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_IDLE &&
-			canJump)
-			currentAnimation = &idleAnimation;
 	}
 	else if (!alive)
 	{
 		currentAnimation = &deadAnimation;
-
 	}
 
+	
 
 
 	//updates animation and draws it
@@ -270,7 +243,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
-			canJump = true;
+			jumping = false;
+			jumpsRemaining = 2;
 			break;
 		case ColliderType::WATER:
 			LOG("Collision Water");
@@ -287,8 +261,30 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			app->sceneIntro->Win = true;
 			app->sceneIntro->beforePlay = false;
 			app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
+			break;
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
+			break;
+		}
+	}
+}
+
+void Player::EndCollision(PhysBody* physA, PhysBody* physB)
+{
+	if (physA->ctype == ColliderType::PLAYER)
+	{
+		switch (physB->ctype)
+		{
+		case ColliderType::ITEM:
+			LOG("ENDCollision ITEM");
+			break;
+		case ColliderType::PLATFORM:
+			LOG("ENDCollision PLATFORM");
+			jumping = true;
+			jumpsRemaining = 1;
+			break;
+		case ColliderType::UNKNOWN:
+			LOG("ENDCollision UNKNOWN");
 			break;
 		}
 	}

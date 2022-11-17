@@ -99,6 +99,8 @@ bool Player::Update()
 		jumpForce--;
 	}
 
+	//test
+
 	int speed = 9;
 
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y - jumpForce);

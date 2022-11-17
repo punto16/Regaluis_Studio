@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Defs.h"
 #include "Log.h"
+#include <string.h>
 
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
@@ -99,66 +100,77 @@ void Map::Draw()
 
 }
 
-void Map::Collisions() // it creates the collisions lol omg xd
+void Map::Collisions(pugi::xml_node mapFile) // it creates the collisions lol omg xd
 {
-    ListItem<MapLayer*>* mapLayerItem;
-    mapLayerItem = mapData.maplayers.start;
+    pugi::xml_node objectGroupNode = mapFile.child("map").child("objectgroup");
 
 
-    while (mapLayerItem != NULL) {
+    while (objectGroupNode != NULL) {
+
+        pugi::xml_node objectNode = objectGroupNode.child("object");
 
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
-        if (mapLayerItem->data->id==2) {
+        if (!strcmp(objectGroupNode.attribute("name").as_string(),"FloorCollisions")) {
 
-            for (int x = 0; x < mapLayerItem->data->width; x++)
+            while (objectNode != NULL)
             {
-                for (int y = 0; y < mapLayerItem->data->height; y++)
-                {
-                    int gid = mapLayerItem->data->Get(x, y);
-                    
+                PhysBody* c1 = app->physics->CreateRectangleSensor( objectNode.attribute("x").as_int() + objectNode.attribute("width").as_int() / 2,
+                                                                    objectNode.attribute("y").as_int() + objectNode.attribute("height").as_int() / 2, 
+                                                                    objectNode.attribute("width").as_int(), 
+                                                                    objectNode.attribute("height").as_int(), 
+                                                                    bodyType::STATIC);
+                c1->ctype = ColliderType::PLATFORM;
+                collisions.Add(c1);
 
-                    
-
-                    //TileSet* tileset = GetTilesetFromTileId(gid);
-
-                    //SDL_Rect r = tileset->GetTileRect(gid);
-                    iPoint pos = MapToWorld(x, y);
-
-                    /*app->render->DrawTexture(tileset->texture,
-                        pos.x,
-                        pos.y,
-                        &r);*/
-
-                        
-                    if (gid == 1)
-                    {
-                        PhysBody* c1 = nullptr;
-                        //PhysBody* c1 = nullptr;
-                        c1 = app->physics->CreateRectangle(pos.x + 16, pos.y + 16, 32, 32, STATIC);
-                        c1->ctype = ColliderType::PLATFORM;
-                        collisions.Add(c1);
-                    }
-                    else if (gid == 2)
-                    {
-                        PhysBody* c1 = nullptr;
-                        //PhysBody* c1 = nullptr;
-                        c1 = app->physics->CreateRectangleSensor(pos.x + 16, pos.y + 16, 32, 32, STATIC);
-                        c1->ctype = ColliderType::VICTORY;
-                        collisions.Add(c1);
-                    }
-                    else if (gid == 3)
-                    {
-                        PhysBody* c1 = nullptr;
-                        c1 = app->physics->CreateRectangleSensor(pos.x + 16, pos.y + 16, 32, 32, STATIC);
-                        c1->ctype = ColliderType::WATER;
-                        collisions.Add(c1);
-                    }
-                        
-                }
+                objectNode = objectNode.next_sibling("object");
             }
         }
-        mapLayerItem = mapLayerItem->next;
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(),"WallCollisions"))
+        {
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateRectangle(       objectNode.attribute("x").as_int() + objectNode.attribute("width").as_int() / 2,
+                                                                    objectNode.attribute("y").as_int() + objectNode.attribute("height").as_int() / 2,
+                                                                    objectNode.attribute("width").as_int(),
+                                                                    objectNode.attribute("height").as_int(),
+                                                                    bodyType::STATIC);
+                c1->ctype = ColliderType::WALL;
+                collisions.Add(c1);
 
+                objectNode = objectNode.next_sibling("object");
+            }
+        }
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "WaterCollisions"))
+        {
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateRectangleSensor( objectNode.attribute("x").as_int() + objectNode.attribute("width").as_int() / 2,
+                                                                    objectNode.attribute("y").as_int() + objectNode.attribute("height").as_int() / 2,
+                                                                    objectNode.attribute("width").as_int(),
+                                                                    objectNode.attribute("height").as_int(),
+                                                                    bodyType::STATIC);
+                c1->ctype = ColliderType::WATER;
+                collisions.Add(c1);
+
+                objectNode = objectNode.next_sibling("object");
+            }
+        }
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "VictoryCollisions"))
+        {
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateRectangleSensor( objectNode.attribute("x").as_int() + objectNode.attribute("width").as_int() / 2,
+                                                                    objectNode.attribute("y").as_int() + objectNode.attribute("height").as_int() / 2,
+                                                                    objectNode.attribute("width").as_int(),
+                                                                    objectNode.attribute("height").as_int(),
+                                                                    bodyType::STATIC);
+                c1->ctype = ColliderType::VICTORY;
+                collisions.Add(c1);
+
+                objectNode = objectNode.next_sibling("object");
+            }
+        }
+        objectGroupNode = objectGroupNode.next_sibling("objectgroup");
     }
 }
 
@@ -299,7 +311,7 @@ bool Map::Load(const char* scene)
     //app->physics->CreateRectangle(352 + 64, 384 + 32, 128, 64, STATIC);
     //app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
 
-    Collisions();
+    Collisions(mapFileXML);
 
 
     if(ret == true)

@@ -6,6 +6,8 @@
 #include "Animation.h"
 #include "SDL/include/SDL.h"
 
+#define MAXJUMPS 2
+
 struct SDL_Texture;
 
 class Player : public Entity
@@ -27,7 +29,7 @@ public:
 	//oncollisionbox2d..
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	//outcollisionbox2d..
-	void EndCollision(PhysBody* bodyA, PhysBody* bodyB)
+	void EndCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
 

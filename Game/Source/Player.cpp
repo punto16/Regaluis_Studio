@@ -86,7 +86,7 @@ bool Player::Start() {
 	position.x = initialPosition.x;
 	position.y = initialPosition.y;
 
-	jumpsRemaining = 2;
+	jumpsRemaining = MAXJUMPS;
 
 	return true;
 }
@@ -239,12 +239,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			LOG("Collision ITEM");
 			app->audio->PlayFx(pickCoinFxId);
 			break;
-		case ColliderType::PLAYERAURA:
-			break;
 		case ColliderType::PLATFORM:
 			LOG("Collision PLATFORM");
 			jumping = false;
-			jumpsRemaining = 2;
+			jumpsRemaining = MAXJUMPS;
 			break;
 		case ColliderType::WATER:
 			LOG("Collision Water");
@@ -280,8 +278,11 @@ void Player::EndCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::PLATFORM:
 			LOG("ENDCollision PLATFORM");
-			//jumping = true;
-			jumpsRemaining = 1;
+			jumping = true;
+			if (jumpsRemaining == MAXJUMPS)
+			{
+				jumpsRemaining = MAXJUMPS - 1;
+			}
 			break;
 		case ColliderType::UNKNOWN:
 			LOG("ENDCollision UNKNOWN");

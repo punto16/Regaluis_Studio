@@ -122,7 +122,7 @@ public:
     // Called each loop iteration
     void Draw();
 
-	void Collisions();
+	void Collisions(pugi::xml_node mapFile);
 
     // Called before quitting
     bool CleanUp();

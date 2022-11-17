@@ -1,37 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\Window.cpp" />
-    <ClCompile Include="Source\Textures.cpp" />
-    <ClCompile Include="Source\Render.cpp" />
-    <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\Input.cpp" />
-    <ClCompile Include="Source\Audio.cpp" />
-    <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp">
       <Filter>External\PugiXml</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EntityManager.cpp" />
-    <ClCompile Include="Source\Player.cpp" />
-    <ClCompile Include="Source\Item.cpp" />
-    <ClCompile Include="Source\Map.cpp" />
-    <ClCompile Include="Source\Physics.cpp" />
-    <ClCompile Include="Source\ModuleFadeToBlack.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
-    <ClCompile Include="Source\SceneIntro.cpp" />
+    <ClCompile Include="Source\App.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneIntro.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityManager.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Textures.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleFadeToBlack.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\terrestreEnemy.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Window.h" />
-    <ClInclude Include="Source\Textures.h" />
-    <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\Render.h" />
-    <ClInclude Include="Source\Module.h" />
-    <ClInclude Include="Source\Input.h" />
-    <ClInclude Include="Source\Audio.h" />
-    <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Defs.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -59,15 +84,58 @@
     <ClInclude Include="Source\Queue.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EntityManager.h" />
-    <ClInclude Include="Source\Player.h" />
-    <ClInclude Include="Source\Entity.h" />
-    <ClInclude Include="Source\Item.h" />
-    <ClInclude Include="Source\Map.h" />
-    <ClInclude Include="Source\Physics.h" />
-    <ClInclude Include="Source\ModuleFadeToBlack.h" />
-    <ClInclude Include="Source\SceneIntro.h" />
     <ClInclude Include="Source\Animation.h" />
+    <ClInclude Include="Source\App.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneIntro.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Audio.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityManager.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Textures.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Render.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleFadeToBlack.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\terrestreEnemy.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -78,6 +146,18 @@
     </Filter>
     <Filter Include="External\PugiXml">
       <UniqueIdentifier>{2855ff7f-53a1-413d-a75b-18b4ade921dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{4272f1b5-6293-45df-b69b-bded0c604d51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{5eec969d-da0c-409e-945c-dc6e135d99af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UtilityModules">
+      <UniqueIdentifier>{6f395430-be72-476b-9326-c24c955f6557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{9510978b-8c99-41f2-9d88-5e03e09e0cab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

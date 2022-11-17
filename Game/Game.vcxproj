@@ -108,6 +108,7 @@
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneIntro.cpp" />
+    <ClCompile Include="Source\terrestreEnemy.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="Source\Animation.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\SceneIntro.h" />
+    <ClInclude Include="Source\terrestreEnemy.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h" />

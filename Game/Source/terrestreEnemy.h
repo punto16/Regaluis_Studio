@@ -53,8 +53,6 @@ private:
 	Animation idleAnimation;
 	Animation walkRightAnimation;
 	Animation walkLeftAnimation;
-	Animation jumpRightAnimation;
-	Animation jumpLeftAnimation;
 	Animation deadAnimation;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body

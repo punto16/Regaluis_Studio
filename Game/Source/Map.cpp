@@ -155,7 +155,7 @@ void Map::Collisions(pugi::xml_node mapFile) // it creates the collisions lol om
                 objectNode = objectNode.next_sibling("object");
             }
         }
-        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "VictoryCollisions"))
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "WinCollisions"))
         {
             while (objectNode != NULL)
             {
@@ -226,14 +226,14 @@ bool Map::CleanUp()
     LOG("Unloading map");
 
     // L04: DONE 2: Make sure you clean up any memory allocated from tilesets/map
-	ListItem<TileSet*>* item;
-	item = mapData.tilesets.start;
+    ListItem<TileSet*>* item;
+    item = mapData.tilesets.start;
 
-	while (item != NULL)
-	{
-		RELEASE(item->data);
-		item = item->next;
-	}
+    while (item != NULL)
+    {
+        RELEASE(item->data);
+        item = item->next;
+    }
 
     mapData.tilesets.Clear();
 
@@ -250,6 +250,7 @@ bool Map::CleanUp()
 
     mapData.maplayers.Clear();
 
+    //REMOVE ALL COLLIDERS
     ListItem<PhysBody*>* collisionsItem;
     collisionsItem = collisions.start;
 
@@ -259,8 +260,27 @@ bool Map::CleanUp()
         RELEASE(collisionsItem->data);
         collisionsItem = collisionsItem->next;
     }
-
     collisions.Clear();
+
+    //REMOVE PLAYER
+    PhysBody* playerBody = app->scene->player->getPbody();
+    if (playerBody != NULL)
+    {
+        playerBody->body->DestroyFixture(playerBody->body->GetFixtureList());
+        RELEASE(playerBody)
+    }
+
+    //REMOVE ENEMIES
+    ListItem<PhysBody*>* enemyItem;
+    enemyItem = enemies.start;
+
+    while (enemyItem != NULL)
+    {
+        enemyItem->data->body->DestroyFixture(enemyItem->data->body->GetFixtureList());
+        RELEASE(enemyItem->data);
+        enemyItem = enemyItem->next;
+    }
+    enemies.Clear();
 
     return true;
 }

@@ -229,7 +229,7 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	playerNode.append_attribute("x") = (player->position.x + 16);
 	playerNode.append_attribute("y") = (player->position.y + 16);
-	if (player->getPbody()->body->GetLinearVelocity().x < 0.5)
+	if (abs(player->getPbody()->body->GetLinearVelocity().x) < 0.5)
 	{
 		playerNode.append_attribute("velx") = (0);
 	}

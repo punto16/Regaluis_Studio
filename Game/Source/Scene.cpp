@@ -212,7 +212,8 @@ bool Scene::LoadState(pugi::xml_node& data)
 	PhysBody* pbody = player->getPbody();
 
 	pbody->SetPosition(data.child("player").attribute("x").as_int(), data.child("player").attribute("y").as_int());
-	//player->jumpForce = data.child("player").attribute("speed").as_int();
+	pbody->body->SetLinearVelocity(b2Vec2(data.child("player").attribute("velx").as_int(), data.child("player").attribute("vely").as_int()));
+	player->jumpsRemaining = data.child("player").attribute("jumpsRemaining").as_int();
 
 	return true;
 }
@@ -228,7 +229,17 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	playerNode.append_attribute("x") = (player->position.x + 16);
 	playerNode.append_attribute("y") = (player->position.y + 16);
-	//playerNode.append_attribute("speed") = player->jumpForce;
+	if (player->getPbody()->body->GetLinearVelocity().x < 0.5)
+	{
+		playerNode.append_attribute("velx") = (0);
+	}
+	else
+	{
+		playerNode.append_attribute("velx") = (player->getPbody()->body->GetLinearVelocity().x);
+	}
+
+	playerNode.append_attribute("vely") = (player->getPbody()->body->GetLinearVelocity().y);
+	playerNode.append_attribute("jumpsRemaining") = (player->jumpsRemaining);
 	
 	return true;
 }

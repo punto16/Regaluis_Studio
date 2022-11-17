@@ -27,7 +27,7 @@ public:
 	//oncollisionbox2d..
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	//outcollisionbox2d..
-	void EndCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void EndCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 public:
 

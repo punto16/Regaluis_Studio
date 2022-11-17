@@ -280,7 +280,7 @@ void Player::EndCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::PLATFORM:
 			LOG("ENDCollision PLATFORM");
-			jumping = true;
+			//jumping = true;
 			jumpsRemaining = 1;
 			break;
 		case ColliderType::UNKNOWN:

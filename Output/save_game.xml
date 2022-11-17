@@ -6,13 +6,13 @@
 	<audio />
 	<:anonymous />
 	<scene>
-		<player x="690" y="206" speed="24" />
+		<player x="129" y="543" velx="0" vely="45.8666382" jumpsRemaining="1" />
 	</scene>
 	<entitymanager />
 	<map />
 	<:anonymous />
 	<scene />
 	<renderer>
-		<camera x="-369" y="0" />
+		<camera x="0" y="0" />
 	</renderer>
 </save_state>

@@ -156,6 +156,7 @@ public:
 	MapData mapData;
 
 	List<PhysBody*> collisions;
+	List<PhysBody*> player;
 	List<PhysBody*> enemies;
 
 private:

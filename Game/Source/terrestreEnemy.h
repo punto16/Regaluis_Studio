@@ -8,6 +8,14 @@
 
 struct SDL_Texture;
 
+enum class STATE
+{
+	NORMALPATH,
+	AGRESSIVEPATH,
+	ATTACKING,
+	DYING
+};
+
 class TerrestreEnemy : public Entity
 {
 public:

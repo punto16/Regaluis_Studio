@@ -10,6 +10,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "ModuleFadeToBlack.h"
+#include "Map.h"
 
 Player::Player(bool startEnabled) : Entity(EntityType::PLAYER)
 {
@@ -73,6 +74,7 @@ bool Player::Start() {
 	pbody = app->physics->CreateCircle(initialPosition.x + 15, initialPosition.y + 15, 15, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
+	app->map->player.Add(pbody);
 
 	//physics of the player "aura"
 	/*pbodyAura = app->physics->CreateRectangleSensor(initialPosition.x + 14, initialPosition.y + 14, 40 ,30, bodyType::DYNAMIC);

@@ -263,12 +263,16 @@ bool Map::CleanUp()
     collisions.Clear();
 
     //REMOVE PLAYER
-    PhysBody* playerBody = app->scene->player->getPbody();
-    if (playerBody != NULL)
+    ListItem<PhysBody*>* playerItem;
+    playerItem = player.start;
+
+    while (playerItem != NULL)
     {
-        playerBody->body->DestroyFixture(playerBody->body->GetFixtureList());
-        RELEASE(playerBody)
+        playerItem->data->body->DestroyFixture(playerItem->data->body->GetFixtureList());
+        RELEASE(playerItem->data);
+        playerItem = playerItem->next;
     }
+    player.Clear();
 
     //REMOVE ENEMIES
     ListItem<PhysBody*>* enemyItem;

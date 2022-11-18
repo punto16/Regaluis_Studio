@@ -34,7 +34,7 @@ bool SceneIntro::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneIntro::Start()
 {
-	StartImage = app->tex->Load("Assets/Textures/PressToPlay.png");
+	StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
 	WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
 	LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
 

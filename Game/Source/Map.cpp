@@ -170,6 +170,14 @@ void Map::Collisions(pugi::xml_node mapFile) // it creates the collisions lol om
                 objectNode = objectNode.next_sibling("object");
             }
         }
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "BridgePlatformCollision"))
+        {
+
+        }
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "BridgeWallCollision"))
+        {
+
+        }
         objectGroupNode = objectGroupNode.next_sibling("objectgroup");
     }
 }

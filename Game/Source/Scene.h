@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Item.h"
 
+#define CAMERASPEED 5
+
 struct SDL_Texture;
 
 class Scene : public Module
@@ -45,6 +47,7 @@ public:
 
 
 	bool godMode = false;
+	bool fixedCamera = true;
 
 private:
 	SDL_Texture* img;

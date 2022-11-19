@@ -88,25 +88,6 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	////if player is below a platform, platform will be able to be passed throw
-	//ListItem<PhysBody*>* collisionsItem;
-	//collisionsItem = app->map->collisions.start;
-
-	//while (collisionsItem != NULL)
-	//{
-	//	int colliderpositionY = collisionsItem->data->body->GetPosition().y + collisionsItem->data->height / 2;
-	//	if (colliderpositionY < player->position.y + player->getPbody()->height)
-	//	{
-	//		collisionsItem->data->body->SetActive(false);
-	//	}
-	//	else
-	//	{
-	//		collisionsItem->data->body->SetActive(true);
-	//	}
-	//	collisionsItem = collisionsItem->next;
-	//}
-
-
 	for (b2Body* b = app->physics->world->GetBodyList(); b; b = b->GetNext())
 	{
 		PhysBody* pB = (PhysBody*)b->GetUserData();
@@ -129,33 +110,45 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-
-
-
-
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 1;
+	{
+		app->render->camera.y += CAMERASPEED;
+		fixedCamera = false;
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 1;
+	{
+		app->render->camera.y -= CAMERASPEED;
+		fixedCamera = false;
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 1;
+	{
+		app->render->camera.x += CAMERASPEED;
+		fixedCamera = false;
+	}
 	
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 1;
+	{
+		app->render->camera.x -= CAMERASPEED;
+		fixedCamera = false;
+	}
+
 	//camera fix to player
-	if (player->position.x > 300 && player->position.x < (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
+	if (fixedCamera && player->position.x > 300 && player->position.x < (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
 	{
 		app->render->camera.x = -(player->position.x - 300);
+		app->render->camera.y = 0;
 	}
-	else if (player->position.x <= 300)
+	else if (fixedCamera && player->position.x <= 300)
 	{
 		app->render->camera.x = 0;
+		app->render->camera.y = 0;
 	}
-	else if (player->position.x > (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
+	else if (fixedCamera && player->position.x > (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
 	{
 		app->render->camera.x = -((app->map->mapData.tileWidth * app->map->mapData.width) - 1024);
+		app->render->camera.y = 0;
 	}
 
 

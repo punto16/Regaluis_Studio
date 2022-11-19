@@ -120,8 +120,9 @@ bool Player::Update()
 	{
 		////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
+		{
+			app->scene->fixedCamera = true;
 			b2Vec2 force = { -speed, 0 };
 			pbody->body->ApplyForceToCenter(force, true);
 			if (vel.x < -10)
@@ -137,7 +138,9 @@ bool Player::Update()
 				currentAnimation = &walkLeftAnimation;
 			}
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
+		{
+			app->scene->fixedCamera = true;
 			b2Vec2 force = { speed, 0 };
 			pbody->body->ApplyForceToCenter(force, true);
 			if (vel.x > 10)
@@ -155,8 +158,9 @@ bool Player::Update()
 		}
 	
 		//with godmode
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->scene->godMode) {
-
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->scene->godMode) 
+		{
+			app->scene->fixedCamera = true;
 			b2Vec2 force = { 0, speed };
 			pbody->body->ApplyForceToCenter(force, true);
 			if (vel.y < -30)
@@ -164,7 +168,9 @@ bool Player::Update()
 				vel.y = -30;
 			}
 		}
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->scene->godMode) {
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->scene->godMode) 
+		{
+			app->scene->fixedCamera = true;
 			b2Vec2 force = { 0, -speed };
 			pbody->body->ApplyForceToCenter(force, true);
 			if (vel.y > 30)
@@ -177,6 +183,7 @@ bool Player::Update()
 		//jump
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->scene->godMode && jumpsRemaining > 0) 
 		{
+			app->scene->fixedCamera = true;
 			vel.y = -20.0f;
 			jumping = true;
 			jumpsRemaining--;

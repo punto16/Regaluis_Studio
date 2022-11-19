@@ -125,9 +125,9 @@ bool Player::Update()
 			app->scene->fixedCamera = true;
 			b2Vec2 force = { -speed, 0 };
 			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.x < -10)
+			if (vel.x < -8)
 			{
-				vel.x = -10;
+				vel.x = -8;
 			}
 			if (jumping)
 			{
@@ -143,9 +143,9 @@ bool Player::Update()
 			app->scene->fixedCamera = true;
 			b2Vec2 force = { speed, 0 };
 			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.x > 10)
+			if (vel.x > 8)
 			{
-				vel.x = 10;
+				vel.x = 8;
 			}
 			if (jumping)
 			{

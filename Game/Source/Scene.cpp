@@ -241,11 +241,11 @@ bool Scene::PostUpdate()
 
 	if (app->FPS == 60)
 	{
-		app->fonts->BlitText(10 - app->render->camera.x, 10,whiteFont,"60 fps");
+		app->fonts->BlitText(10 - app->render->camera.x / scale, 10 - app->render->camera.y / scale, blackFont,"60 fps");
 	}
 	else if (app->FPS == 30)
 	{
-		app->fonts->BlitText(10 - app->render->camera.x, 10, whiteFont, "30 fps");
+		app->fonts->BlitText(10 - app->render->camera.x / scale, 10 - app->render->camera.y / scale, blackFont, "30 fps");
 	}
 
 
@@ -257,7 +257,6 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	//player->Disable();			//MUST BE REPAIRED
 	if (app->entityManager->IsEnabled())
 	{
 		app->entityManager->Disable();

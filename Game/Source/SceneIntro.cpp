@@ -34,9 +34,19 @@ bool SceneIntro::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneIntro::Start()
 {
-	StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
-	WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
-	LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
+	if (app->win->GetScale() == 1)
+	{
+		StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
+		WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
+		LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
+	}
+	else if (app->win->GetScale() == 2)
+	{
+		StartImage = app->tex->Load("Assets/Textures/screenIntroScale2.png");
+		WinImage = app->tex->Load("Assets/Textures/VictoryScreenScale2.png");
+		LoseImage = app->tex->Load("Assets/Textures/LoseScreenScale2.png");
+	}
+	
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;

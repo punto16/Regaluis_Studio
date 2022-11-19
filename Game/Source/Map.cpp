@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Defs.h"
 #include "Log.h"
+#include "Window.h"
 #include <string.h>
 
 #include <math.h>
@@ -35,19 +36,6 @@ void Map::Draw()
 {
     if(mapLoaded == false)
         return;
-
-    /*
-    // L04: DONE 6: Iterate all tilesets and draw all their 
-    // images in 0,0 (you should have only one tileset for now)
-
-    ListItem<TileSet*>* tileset;
-    tileset = mapData.tilesets.start;
-
-    while (tileset != NULL) {
-        app->render->DrawTexture(tileset->data->texture,0,0);
-        tileset = tileset->next;
-    }
-    */
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
@@ -78,7 +66,7 @@ void Map::Draw()
                     if (mapLayerItem->data->id == 5)     //PARALAX STUFF
                     {
                         app->render->DrawTexture(tileset->texture,
-                            pos.x - (app->render->camera.x) * 0.3,
+                            pos.x - (app->render->camera.x) * 0.3 / app->win->GetScale(),
                             pos.y,
                             &r);
                     

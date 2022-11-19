@@ -239,7 +239,6 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	//CUANDO HAGA COLLIDERS PARA EL SALTO, FIXEAR LOS SALTOS POCHOS DE UPDATE Y REPARAR ANIMACIONES DE SALTO
 	if (physA->ctype == ColliderType::PLAYER)
 	{
 		switch (physB->ctype)
@@ -269,6 +268,19 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			app->sceneIntro->beforePlay = false;
 			app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
 			break;
+		case ColliderType::TERRESTREENEMY:
+			LOG("Collision TerrestreEnemy");
+			if (!jumping && !app->scene->godMode)
+			{
+				alive = false;
+				app->sceneIntro->Win = false;
+				app->sceneIntro->beforePlay = false;
+				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
+			}
+			else 
+			{
+				pbody->body->SetLinearVelocity( b2Vec2(0,-20.0f));
+			}
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;

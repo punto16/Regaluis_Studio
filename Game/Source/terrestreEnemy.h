@@ -54,7 +54,7 @@ private:
 
 	bool alive;
 
-
+	STATE state;
 
 	//animations
 	Animation* currentAnimation = nullptr;

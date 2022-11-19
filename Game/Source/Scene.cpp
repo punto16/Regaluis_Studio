@@ -53,6 +53,18 @@ bool Scene::Start()
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");
 
+
+	//create 1 terrestre enemy
+	configNode = app->LoadConfigFileToVar();
+	config = configNode.child(name.GetString());
+
+	for (pugi::xml_node itemNode = config.child("terrestreEnemy"); itemNode; itemNode = itemNode.next_sibling("item"))
+	{
+		TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
+		newTerrestreEnemy->parameters = itemNode;
+	}
+
+
 	char lookupTable[] = { "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ " };
 	blackFont = app->fonts->Load("Assets/Fonts/sprite_font_black.png", lookupTable, 6);
 	whiteFont = app->fonts->Load("Assets/Fonts/sprite_font_white.png", lookupTable, 6);
@@ -71,16 +83,10 @@ bool Scene::Start()
 	//enable all entities
 	app->entityManager->EnableEntities();
 
-
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());
-
-	app->win->SetTitle(title.GetString());*/
+	//window data
+	
+	scale = app->win->GetScale();
+	app->win->GetWindowSize(width, height);
 
 	return true;
 }
@@ -134,22 +140,38 @@ bool Scene::Update(float dt)
 		fixedCamera = false;
 	}
 
-	//camera fix to player
-	if (fixedCamera && player->position.x > 300 && player->position.x < (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
+
+
+
+	//camera fix to player in x axis
+	if (fixedCamera && player->position.x > 300 / scale && player->position.x < (app->map->mapData.tileWidth * app->map->mapData.width) - 724 / scale)
 	{
-		app->render->camera.x = -(player->position.x - 300);
-		app->render->camera.y = 0;
+ 		app->render->camera.x = -1 * scale * (player->position.x - 300 / scale);
 	}
-	else if (fixedCamera && player->position.x <= 300)
+	else if (fixedCamera && player->position.x <= 300 / scale)
 	{
 		app->render->camera.x = 0;
-		app->render->camera.y = 0;
 	}
-	else if (fixedCamera && player->position.x > (app->map->mapData.tileWidth * app->map->mapData.width) - 724)
+	else if (fixedCamera && player->position.x >= (app->map->mapData.tileWidth * app->map->mapData.width) - 724 / scale)
 	{
-		app->render->camera.x = -((app->map->mapData.tileWidth * app->map->mapData.width) - 1024);
+		app->render->camera.x = -1 * scale * ((app->map->mapData.tileWidth * app->map->mapData.width) - 1024 / scale);
+	}
+
+	//camera fix to player in y axis
+	if (fixedCamera && player->position.y > 300 / scale && player->position.y < (app->map->mapData.tileHeight * app->map->mapData.height) - 468 / scale)
+	{
+		app->render->camera.y = -1 * scale * (player->position.y - 300 / scale);
+	}
+	else if (player->position.y <= 300 / scale || player->position.y < 0)
+	{
 		app->render->camera.y = 0;
 	}
+	else if (player->position.y >= (app->map->mapData.tileHeight * app->map->mapData.height) - 468 / scale)
+	{
+		app->render->camera.y = (1 - scale) * height;
+	}
+
+
 
 
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)

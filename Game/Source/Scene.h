@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
+#include "terrestreEnemy.h"
 
 #define CAMERASPEED 5
 
@@ -44,6 +45,12 @@ public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
+
+	//terrestre enemies list
+	List<TerrestreEnemy*> terrestreEnemies;
+
+	//window data
+	uint width, height, scale;
 
 	int blackFont = -1;
 	int whiteFont = -1;

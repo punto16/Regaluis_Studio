@@ -176,6 +176,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			{
 				alive = false;
 				tebody->body->SetActive(false);
+				this->Disable();
 			}
 		case ColliderType::UNKNOWN:
 			LOG("TERRESTRE ENEMY Collision UNKNOWN");

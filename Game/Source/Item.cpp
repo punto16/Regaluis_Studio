@@ -56,7 +56,6 @@ bool Item::CleanUp()
 
 void Item::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	//CUANDO HAGA COLLIDERS PARA EL SALTO, FIXEAR LOS SALTOS POCHOS DE UPDATE Y REPARAR ANIMACIONES DE SALTO
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:

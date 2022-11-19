@@ -39,7 +39,6 @@ bool SceneIntro::Start()
 	WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
 	LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
 
-	
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;

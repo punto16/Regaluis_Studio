@@ -3,6 +3,7 @@
 
 #include "Defs.h"
 #include "Log.h"
+#include "SDL_image/include/SDL_image.h"
 
 #include "SDL/include/SDL.h"
 
@@ -61,6 +62,7 @@ bool Window::Awake(pugi::xml_node& config)
 		{
 			// Get window surface
 			screenSurface = SDL_GetWindowSurface(window);
+			SetIcon("Assets/Textures/icon.png");
 		}
 	}
 
@@ -86,8 +88,14 @@ bool Window::CleanUp()
 // Set new window title
 void Window::SetTitle(const char* new_title)
 {
-	//title.create(new_title);
 	SDL_SetWindowTitle(window, new_title);
+}
+
+// Set new window title
+void Window::SetIcon(const char* new_icon)
+{
+	SDL_Surface* surface = IMG_Load(new_icon);
+	SDL_SetWindowIcon(window, surface);
 }
 
 void Window::GetWindowSize(uint& width, uint& height) const

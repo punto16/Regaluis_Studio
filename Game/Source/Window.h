@@ -24,6 +24,9 @@ public:
 	// Changae title
 	void SetTitle(const char* title);
 
+	//change icon
+	void SetIcon(const char* new_icon);
+
 	// Retrive window size
 	void GetWindowSize(uint& width, uint& height) const;
 

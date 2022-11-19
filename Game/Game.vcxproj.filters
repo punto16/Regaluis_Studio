@@ -142,6 +142,7 @@
     <ClInclude Include="Source\ModuleFonts.h">
       <Filter>UtilityModules</Filter>
     </ClInclude>
+    <ClInclude Include="Source\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

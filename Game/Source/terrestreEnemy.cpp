@@ -157,6 +157,9 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		case ColliderType::PLATFORM:
 			LOG("TERRESTRE ENEMY Collision PLATFORM");
 			break;
+		case ColliderType::WALL:
+			LOG("TERRESTRE ENEMY Collision Wall");
+			break;
 		case ColliderType::WATER:
 			LOG("TERRESTRE ENEMY Collision Water");
 			if (!app->scene->godMode)

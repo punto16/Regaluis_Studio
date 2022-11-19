@@ -252,6 +252,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			jumping = false;
 			jumpsRemaining = MAXJUMPS;
 			break;
+		case ColliderType::WALL:
+			LOG("Collision Wall");
+			break;
+		case ColliderType::FLOATINGTERRAIN:
+			LOG("Collision FloatingTerrain");
+			break;
 		case ColliderType::WATER:
 			LOG("Collision Water");
 			if (!app->scene->godMode)

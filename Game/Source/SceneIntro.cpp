@@ -34,18 +34,11 @@ bool SceneIntro::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneIntro::Start()
 {
-	if (app->win->GetScale() == 1)
-	{
-		StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
-		WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
-		LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
-	}
-	else if (app->win->GetScale() == 2)
-	{
-		StartImage = app->tex->Load("Assets/Textures/screenIntroScale2.png");
-		WinImage = app->tex->Load("Assets/Textures/VictoryScreenScale2.png");
-		LoseImage = app->tex->Load("Assets/Textures/LoseScreenScale2.png");
-	}
+
+	StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
+	WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
+	LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
+
 	
 
 	app->render->camera.x = 0;
@@ -92,17 +85,17 @@ bool SceneIntro::Update(float dt)
 
 	if (beforePlay)
 	{
-		app->render->DrawTexture(StartImage, 0, 0);
+		app->render->DrawTexture(StartImage, 0, 0, 0, 1.0f, 0.0, 2147483647, 2147483647, true);
 	}
 	else
 	{
 		if (Win)
 		{
-			app->render->DrawTexture(WinImage, 0, 0);
+			app->render->DrawTexture(WinImage, 0, 0, 0, 1.0f, 0.0, 2147483647, 2147483647, true);
 		}
 		else
 		{
-			app->render->DrawTexture(LoseImage, 0, 0);
+			app->render->DrawTexture(LoseImage, 0, 0, 0, 1.0f, 0.0, 2147483647, 2147483647, true);
 		}
 	}
 

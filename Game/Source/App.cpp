@@ -11,6 +11,7 @@
 
 #include "ModuleFadeToBlack.h"
 #include "SceneIntro.h"
+#include "ModuleFonts.h"
 
 
 #include "Defs.h"
@@ -38,6 +39,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	//added later
 	fade = new ModuleFadeToBlack(true);
 	sceneIntro = new SceneIntro(true);
+	fonts = new ModuleFonts(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	//added later
 	AddModule(fade);
 	AddModule(sceneIntro);
+	AddModule(fonts);
 
 	// Render last to swap buffer
 	AddModule(render);

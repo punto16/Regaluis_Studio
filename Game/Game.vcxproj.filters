@@ -55,6 +55,9 @@
     <ClCompile Include="Source\terrestreEnemy.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModuleFonts.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="Source\terrestreEnemy.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleFonts.h">
+      <Filter>UtilityModules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

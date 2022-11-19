@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "ModuleFadeToBlack.h"
 #include "SceneIntro.h"
+#include "ModuleFonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -52,8 +53,10 @@ bool Scene::Start()
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");
 
-
-
+	char lookupTable[] = { "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ " };
+	blackFont = app->fonts->Load("Assets/Fonts/sprite_font_black.png", lookupTable, 6);
+	whiteFont = app->fonts->Load("Assets/Fonts/sprite_font_white.png", lookupTable, 6);
+	
 	//img = app->tex->Load("Assets/Textures/test.png");
 	app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	
@@ -178,6 +181,18 @@ bool Scene::Update(float dt)
 		}
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)//caps fps to 30 or 60
+	{
+		if (app->FPS == 60)
+		{
+			app->FPS = 30;
+		}
+		else 
+		{
+			app->FPS = 60;
+		}
+	}
+
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
@@ -215,6 +230,15 @@ bool Scene::PostUpdate()
 		app->fade->FadeToBlack(this, (Module*)app->sceneIntro, 60);
 	}
 
+	if (app->FPS == 60)
+	{
+		app->fonts->BlitText(10 - app->render->camera.x, 10,whiteFont,"60 fps");
+	}
+	else if (app->FPS == 30)
+	{
+		app->fonts->BlitText(10 - app->render->camera.x, 10, whiteFont, "30 fps");
+	}
+
 
 	return ret;
 }
@@ -229,6 +253,9 @@ bool Scene::CleanUp()
 	{
 		app->entityManager->Disable();
 	}
+
+	app->fonts->UnLoad(blackFont);
+	app->fonts->UnLoad(whiteFont);
 
 	app->map->CleanUp();
 

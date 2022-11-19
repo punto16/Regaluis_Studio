@@ -18,6 +18,7 @@ class Audio;
 class Scene;
 class EntityManager;
 class Map;
+class ModuleFonts;
 
 //added later
 class ModuleFadeToBlack;
@@ -66,6 +67,7 @@ public:
 
 	pugi::xml_node LoadConfigFileToVar();
 
+	int FPS = 60;
 
 private:
 
@@ -99,6 +101,7 @@ public:
 	Scene* scene;
 	EntityManager* entityManager;
 	Map* map;
+	ModuleFonts* fonts = nullptr;
 	//L07 DONE 2: Add Physics module
 	Physics* physics;
 

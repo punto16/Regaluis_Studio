@@ -45,6 +45,8 @@ public:
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
 
+	int blackFont = -1;
+	int whiteFont = -1;
 
 	bool godMode = false;
 	bool fixedCamera = true;

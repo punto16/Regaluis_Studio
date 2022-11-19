@@ -166,4 +166,7 @@
       <UniqueIdentifier>{9510978b-8c99-41f2-9d88-5e03e09e0cab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\ANormalWalkInElPueblo.rc" />
+  </ItemGroup>
 </Project>

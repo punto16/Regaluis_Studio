@@ -72,9 +72,6 @@ bool Scene::Start()
 	app->entityManager->EnableEntities();
 
 
-	 
-
-	
 	// L04: DONE 7: Set the window title with map/tileset info
 	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -155,8 +152,6 @@ bool Scene::Update(float dt)
 	}
 
 
-
-
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 	{
@@ -194,23 +189,15 @@ bool Scene::Update(float dt)
 	}
 
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-
-
-
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//restart current level
 	{
 		PhysBody* pbody = player->getPbody();
-		//PhysBody* pbodyAura = player->getPbodyAura();
 		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
-		//pbodyAura->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		PhysBody* pbody = player->getPbody();
-		//PhysBody* pbodyAura = player->getPbodyAura();
 		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
-		//pbodyAura->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 
 	// Draw map

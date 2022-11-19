@@ -159,7 +159,7 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	return pbody;
 }
 
-PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type)
+PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type, bool sensor)
 {
 	b2BodyDef body;
 
@@ -184,6 +184,11 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	
+	if (sensor)
+	{
+		fixture.isSensor = true;
+	}
 
 	b->CreateFixture(&fixture);
 

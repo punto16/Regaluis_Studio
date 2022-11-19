@@ -226,6 +226,11 @@ public:
 		return str;
 	}
 
+	const char GetTerm(int term)
+	{
+		return str[term];
+	}
+
 	unsigned int GetCapacity() const
 	{
 		return size;

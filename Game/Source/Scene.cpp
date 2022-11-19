@@ -88,12 +88,51 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	////if player is below a platform, platform will be able to be passed throw
+	//ListItem<PhysBody*>* collisionsItem;
+	//collisionsItem = app->map->collisions.start;
+
+	//while (collisionsItem != NULL)
+	//{
+	//	int colliderpositionY = collisionsItem->data->body->GetPosition().y + collisionsItem->data->height / 2;
+	//	if (colliderpositionY < player->position.y + player->getPbody()->height)
+	//	{
+	//		collisionsItem->data->body->SetActive(false);
+	//	}
+	//	else
+	//	{
+	//		collisionsItem->data->body->SetActive(true);
+	//	}
+	//	collisionsItem = collisionsItem->next;
+	//}
+
+
+	for (b2Body* b = app->physics->world->GetBodyList(); b; b = b->GetNext())
+	{
+		PhysBody* pB = (PhysBody*)b->GetUserData();
+		if (pB->ctype == ColliderType::FLOATINGTERRAIN) {
+			int posX = 0;
+			int posY = 0;
+			pB->GetPosition(posX, posY);
+			if (posY < player->position.y + 32) {
+				pB->body->SetActive(false);
+			}
+			else {
+				pB->body->SetActive(true);
+			}
+		}
+	}
+
 	return true;
 }
 
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+
+
+
+
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 1;
 

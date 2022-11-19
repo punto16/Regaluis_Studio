@@ -170,13 +170,143 @@ void Map::Collisions(pugi::xml_node mapFile) // it creates the collisions lol om
                 objectNode = objectNode.next_sibling("object");
             }
         }
+        else if (!strcmp(objectGroupNode.attribute("name").as_string(), "FloatingTerrainCollisions"))
+        {
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateRectangle(   objectNode.attribute("x").as_int() + objectNode.attribute("width").as_int() / 2,
+                                                                objectNode.attribute("y").as_int() + objectNode.attribute("height").as_int() / 2,
+                                                                objectNode.attribute("width").as_int(),
+                                                                objectNode.attribute("height").as_int(),
+                                                                bodyType::STATIC);
+                    c1->ctype = ColliderType::FLOATINGTERRAIN;
+                    collisions.Add(c1);
+
+                    objectNode = objectNode.next_sibling("object");
+            }
+        }
         else if (!strcmp(objectGroupNode.attribute("name").as_string(), "BridgePlatformCollision"))
         {
+            //getting the array of points from xml
 
+            SString pointsString = (objectNode.child("polygon").attribute("points").as_string());
+            int size = 0;
+            int points[MAX_ARRAY_ELEMENTS];
+            bool negative = false;
+
+            //capped to maximum of a coord = 9999
+            int toadditerator = 0;
+            int iterator = 0;
+            while ( pointsString.GetTerm(iterator) != '\0')
+            {
+                if (pointsString.GetTerm(iterator) == '-')
+                {
+                    negative = true;
+                }
+                else if (pointsString.GetTerm(iterator) != ',' && pointsString.GetTerm(iterator) != ' ')
+                {
+                    points[size] = (int)pointsString.GetTerm(iterator) - 48;
+
+                    if (pointsString.GetTerm(iterator + 1) != '\0' && pointsString.GetTerm(iterator + 1) != ',' && pointsString.GetTerm(iterator + 1) != ' ')
+                    {
+                        points[size] *= 10;
+                        points[size] += (int)pointsString.GetTerm(iterator + 1) - 48;
+                        toadditerator++;
+                        if (pointsString.GetTerm(iterator + 2) != '\0' && pointsString.GetTerm(iterator + 2) != ',' && pointsString.GetTerm(iterator + 2) != ' ')
+                        {
+                            points[size] *= 10;
+                            points[size] += (int)pointsString.GetTerm(iterator + 2) - 48;
+                            toadditerator++;
+                            if (pointsString.GetTerm(iterator + 3) != '\0' && pointsString.GetTerm(iterator + 3) != ',' && pointsString.GetTerm(iterator + 3) != ' ')
+                            {
+                                points[size] *= 10;
+                                points[size] += (int)pointsString.GetTerm(iterator + 3) - 48;
+                                toadditerator++;
+                            }
+                        }
+                    }
+                    if (negative)
+                    {
+                        points[size] *= -1;
+                    }
+                    size++;
+                }
+                iterator += toadditerator + 1;
+                toadditerator = 0;
+            }
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateChain(   objectNode.attribute("x").as_int(),
+                                                            objectNode.attribute("y").as_int(),
+                                                            points,
+                                                            size,
+                                                            bodyType::STATIC,
+                                                            true);
+                c1->ctype = ColliderType::PLATFORM;
+                collisions.Add(c1);
+                objectNode = objectNode.next_sibling("object");
+            }
         }
         else if (!strcmp(objectGroupNode.attribute("name").as_string(), "BridgeWallCollision"))
         {
+            //getting the array of points from xml
 
+            SString pointsString = (objectNode.child("polygon").attribute("points").as_string());
+            int size = 0;
+            int points[MAX_ARRAY_ELEMENTS];
+            bool negative = false;
+
+            //capped to maximum of a coord = 9999
+            int toadditerator = 0;
+            int iterator = 0;
+            while (pointsString.GetTerm(iterator) != '\0')
+            {
+                if (pointsString.GetTerm(iterator) == '-')
+                {
+                    negative = true;
+                }
+                else if (pointsString.GetTerm(iterator) != ',' && pointsString.GetTerm(iterator) != ' ')
+                {
+                    points[size] = (int)pointsString.GetTerm(iterator) - 48;
+
+                    if (pointsString.GetTerm(iterator + 1) != '\0' && pointsString.GetTerm(iterator + 1) != ',' && pointsString.GetTerm(iterator + 1) != ' ')
+                    {
+                        points[size] *= 10;
+                        points[size] += (int)pointsString.GetTerm(iterator + 1) - 48;
+                        toadditerator++;
+                        if (pointsString.GetTerm(iterator + 2) != '\0' && pointsString.GetTerm(iterator + 2) != ',' && pointsString.GetTerm(iterator + 2) != ' ')
+                        {
+                            points[size] *= 10;
+                            points[size] += (int)pointsString.GetTerm(iterator + 2) - 48;
+                            toadditerator++;
+                            if (pointsString.GetTerm(iterator + 3) != '\0' && pointsString.GetTerm(iterator + 3) != ',' && pointsString.GetTerm(iterator + 3) != ' ')
+                            {
+                                points[size] *= 10;
+                                points[size] += (int)pointsString.GetTerm(iterator + 3) - 48;
+                                toadditerator++;
+                            }
+                        }
+                    }
+                    if (negative)
+                    {
+                        points[size] *= -1;
+                    }
+                    size++;
+                }
+                iterator += toadditerator + 1;
+                toadditerator = 0;
+            }
+            while (objectNode != NULL)
+            {
+                PhysBody* c1 = app->physics->CreateChain(   objectNode.attribute("x").as_int(),
+                                                            objectNode.attribute("y").as_int(),
+                                                            points,
+                                                            size,
+                                                            bodyType::STATIC);
+                c1->ctype = ColliderType::WALL;
+                collisions.Add(c1);
+                objectNode = objectNode.next_sibling("object");
+            }
         }
         objectGroupNode = objectGroupNode.next_sibling("objectgroup");
     }

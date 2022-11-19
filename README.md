@@ -23,6 +23,7 @@ The objective is to reach the end of the level.
  - F6 to load the state previously saved in the xml file
  - F9 to see the colliders
  - F10 to go god mode (player can fly and can't die)
+ - F11 to toggle FPS (30 FPS and 60 FPS)
  - ESC inside a level to go to the intro screen
  - ESC in the intro screen to close the game
 

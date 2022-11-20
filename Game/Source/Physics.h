@@ -86,7 +86,7 @@ public:
 	void EndContact(b2Contact* contact);
 
 	b2World* world;
-	bool debug = true;
+	bool debug = false;
 
 private:
 

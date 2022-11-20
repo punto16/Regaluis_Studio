@@ -69,6 +69,7 @@ bool Player::Start() {
 	currentAnimation = &idleAnimation;
 	
 	alive = true;
+	winning = false;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(initialPosition.x + 15, initialPosition.y + 15, 15, bodyType::DYNAMIC);
@@ -116,7 +117,7 @@ bool Player::Update()
 		pbody->body->SetGravityScale(1);
 	}
 
-	if (alive)
+	if (alive && !winning)
 	{
 		////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
@@ -215,6 +216,13 @@ bool Player::Update()
 	{
 		currentAnimation = &deadAnimation;
 	}
+	else if (-winning)
+	{
+	currentAnimation = &idleAnimation;
+		vel = b2Vec2(0,-GRAVITY_Y);
+		pbody->body->SetLinearVelocity(vel);
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
+	}
 
 	
 
@@ -270,6 +278,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::VICTORY:
 			LOG("Collision Victory");
+			winning = true;
 			app->sceneIntro->Win = true;
 			app->sceneIntro->beforePlay = false;
 			app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);

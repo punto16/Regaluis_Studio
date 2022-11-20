@@ -49,6 +49,7 @@ private:
 	const char* texturePath;
 
 	bool alive;
+	bool winning;
 	
 
 	//animations

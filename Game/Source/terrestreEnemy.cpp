@@ -103,6 +103,13 @@ bool TerrestreEnemy::Start() {
 
 bool TerrestreEnemy::Update()
 {
+	//delete the enemies that has been killed
+	if (pendingToSetInactive != nullptr)
+	{
+		pendingToSetInactive->body->SetActive(false);
+		pendingToSetInactive = nullptr;
+	}
+
 	if (alive)
 	{
 		b2Vec2 vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
@@ -175,8 +182,8 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			if (app->scene->player->jumping && !app->scene->godMode)
 			{
 				alive = false;
-				tebody->body->SetActive(false);
-				this->Disable();
+				pendingToSetInactive = physA;
+				//this->Disable();
 			}
 		case ColliderType::UNKNOWN:
 			LOG("TERRESTRE ENEMY Collision UNKNOWN");

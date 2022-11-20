@@ -170,8 +170,4 @@
   <ItemGroup>
     <ResourceCompile Include="Source\ANormalWalkInElPueblo.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Output\Assets\Textures\icon.ico" />
-    <Image Include="Source\icon1.ico" />
-  </ItemGroup>
 </Project>

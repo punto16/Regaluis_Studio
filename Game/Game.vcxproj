@@ -147,10 +147,6 @@
   <ItemGroup>
     <ResourceCompile Include="Source\ANormalWalkInElPueblo.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Output\Assets\Textures\icon.ico" />
-    <Image Include="Source\icon1.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

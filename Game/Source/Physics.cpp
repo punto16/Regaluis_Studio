@@ -46,19 +46,21 @@ bool Physics::PreUpdate()
 	bool ret = true;
 	world->Step(1.0f / 60.0f, 6, 2);
 
-	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
-	{
-		if (c->IsTouching() && c->GetFixtureA()->IsSensor())
-		{
-			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
+	//it gives error, so i commented it
+	//
+	//for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
+	//{
+	//	if (c->IsTouching() && c->GetFixtureA()->IsSensor())
+	//	{
+	//		PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+	//		PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
 
-			if (pb1 && pb2 && pb1->listener)
-			{
-				pb1->listener->OnCollision(pb1, pb2);
-			}
-		}
-	}
+	//		if (pb1 && pb2 && pb1->listener)
+	//		{
+	//			pb1->listener->OnCollision(pb1, pb2);
+	//		}
+	//	}
+	//}
 
 
 	return ret;

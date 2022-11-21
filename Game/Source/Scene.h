@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "terrestreEnemy.h"
+#include "Point.h"
 
 #define CAMERASPEED 5
 
@@ -48,6 +49,9 @@ public:
 
 	//terrestre enemies list
 	List<TerrestreEnemy*> terrestreEnemies;
+
+	//ray
+	Point<int> ray;
 
 	//window data
 	uint width, height, scale;

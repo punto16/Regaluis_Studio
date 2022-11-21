@@ -37,10 +37,10 @@ public:
 
 public:
 
-	PhysBody* getTebody()
-	{
-		return tebody;
-	}
+	//PhysBody* getTebody()
+	//{
+	//	return tebody;
+	//}
 
 	PhysBody* pendingToSetInactive;
 
@@ -67,7 +67,7 @@ private:
 	Animation deadAnimation;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
-	PhysBody* tebody;
+	//PhysBody* tebody;
 
 
 };

@@ -94,21 +94,22 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	for (b2Body* b = app->physics->world->GetBodyList(); b; b = b->GetNext())
-	{
-		PhysBody* pB = (PhysBody*)b->GetUserData();
-		if (pB->ctype == ColliderType::FLOATINGTERRAIN) {
-			int posX = 0;
-			int posY = 0;
-			pB->GetPosition(posX, posY);
-			if (posY < player->position.y + 32) {
-				pB->body->SetActive(false);
-			}
-			else {
-				pB->body->SetActive(true);
-			}
-		}
-	}
+	////FLOATING TERRAIN WILL INACTIVE WHILE PLAYER IS BELOW IT
+	//for (b2Body* b = app->physics->world->GetBodyList(); b; b = b->GetNext())
+	//{
+	//	PhysBody* pB = (PhysBody*)b->GetUserData();
+	//	if (pB->ctype == ColliderType::FLOATINGTERRAIN) {
+	//		int posX = 0;
+	//		int posY = 0;
+	//		pB->GetPosition(posX, posY);
+	//		if (posY < player->position.y + 32) {
+	//			pB->body->SetActive(false);
+	//		}
+	//		else {
+	//			pB->body->SetActive(true);
+	//		}
+	//	}
+	//}
 
 	return true;
 }
@@ -247,7 +248,42 @@ bool Scene::PostUpdate()
 	{
 		app->fonts->BlitText(10 - app->render->camera.x / scale, 10 - app->render->camera.y / scale, blackFont, "30 fps");
 	}
+	
+	//here should add path of terrestre enemy
 
+	if (app->physics->debug)
+	{
+		ListItem<PhysBody*>* ItemListTE = app->map->enemies.start;
+		PhysBody* tebody;
+		PhysBody* pbody = player->getPbody();
+
+		while (ItemListTE != NULL)
+		{
+			tebody = ItemListTE->data;
+
+			if (ItemListTE->data->body->IsActive())
+			{
+
+
+				//ray between terrestre enemy and player
+				app->render->DrawLine(METERS_TO_PIXELS(tebody->body->GetPosition().x),
+					METERS_TO_PIXELS(tebody->body->GetPosition().y),
+					METERS_TO_PIXELS(pbody->body->GetPosition().x),
+					METERS_TO_PIXELS(pbody->body->GetPosition().y),
+					255, 0, 0);//red
+
+				//ray that is the PATH of the terrestre enemy 
+				//PATH IS YET BEING IMPLEMENTED, NOT THE REAL REAL PATHXD
+				app->render->DrawLine(METERS_TO_PIXELS(tebody->body->GetPosition().x),
+					METERS_TO_PIXELS(tebody->body->GetPosition().y),
+					METERS_TO_PIXELS(pbody->body->GetPosition().x),
+					METERS_TO_PIXELS(tebody->body->GetPosition().y),
+					0, 255, 0); //green
+			}
+
+			ItemListTE = ItemListTE->next;
+		}
+	}
 
 	return ret;
 }

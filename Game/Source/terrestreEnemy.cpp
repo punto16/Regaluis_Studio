@@ -83,6 +83,8 @@ bool TerrestreEnemy::Start() {
 	alive = true;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
+	PhysBody* tebody;
+
 	tebody = app->physics->CreateRectangle(initialPosition.x + 14, initialPosition.y + 6, 28,12, bodyType::DYNAMIC);
 	tebody->listener = this;
 	tebody->ctype = ColliderType::TERRESTREENEMY;
@@ -112,20 +114,50 @@ bool TerrestreEnemy::Update()
 
 	if (alive)
 	{
-		b2Vec2 vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-		float32 speed = 5.0f;
-		//move to left
-		b2Vec2 force = { -speed, 0 };
-		tebody->body->ApplyForceToCenter(force, true);
-		if (vel.x < -3)
-		{
-			vel.x = -3;
-		}
-		currentAnimation = &walkLeftAnimation;
+		ListItem<PhysBody*>* ItemListTE = app->map->enemies.start;
+		PhysBody* tebody;
+		PhysBody* pbody = app->scene->player->getPbody();
 
-		tebody->body->SetLinearVelocity(vel);
-		position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
-		position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
+		while (ItemListTE != NULL)
+		{
+			tebody = ItemListTE->data;
+
+			if (ItemListTE->data->body->IsActive())
+			{
+				b2Vec2 vel;
+				if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
+				{
+					vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+					float32 speed = 5.0f;
+					//move to left
+					b2Vec2 force = { -speed, 0 };
+					tebody->body->ApplyForceToCenter(force, true);
+					if (vel.x < -3)
+					{
+						vel.x = -3;
+					}
+					currentAnimation = &walkLeftAnimation;
+				}
+				else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+				{
+					vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+					float32 speed = 5.0f;
+					//move to left
+					b2Vec2 force = { speed, 0 };
+					tebody->body->ApplyForceToCenter(force, true);
+					if (vel.x > 3)
+					{
+						vel.x = 3;
+					}
+					currentAnimation = &walkRightAnimation;
+				}
+				tebody->body->SetLinearVelocity(vel);
+				position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
+				position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
+			}
+			ItemListTE = ItemListTE->next;
+		}
+
 	}
 	else if (!alive)
 	{

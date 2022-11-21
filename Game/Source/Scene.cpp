@@ -97,7 +97,7 @@ bool Scene::PreUpdate()
 	for (b2Body* b = app->physics->world->GetBodyList(); b; b = b->GetNext())
 	{
 		PhysBody* pB = (PhysBody*)b->GetUserData();
-		if (pB->ctype == ColliderType::FLOATINGTERRAIN || pB->ctype == ColliderType::PLATFORM) {
+		if (pB->ctype == ColliderType::FLOATINGTERRAIN) {
 			int posX = 0;
 			int posY = 0;
 			pB->GetPosition(posX, posY);

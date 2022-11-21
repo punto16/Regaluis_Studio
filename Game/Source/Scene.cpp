@@ -58,7 +58,7 @@ bool Scene::Start()
 	configNode = app->LoadConfigFileToVar();
 	config = configNode.child(name.GetString());
 
-	for (pugi::xml_node itemNode = config.child("terrestreEnemy"); itemNode; itemNode = itemNode.next_sibling("item"))
+	for (pugi::xml_node itemNode = config.child("terrestreEnemy"); itemNode; itemNode = itemNode.next_sibling("terrestreEnemy"))
 	{
 		TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
 		newTerrestreEnemy->parameters = itemNode;

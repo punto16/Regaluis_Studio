@@ -216,9 +216,9 @@ bool Player::Update()
 	{
 		currentAnimation = &deadAnimation;
 	}
-	else if (-winning)
+	else if (winning)
 	{
-	currentAnimation = &idleAnimation;
+		currentAnimation = &idleAnimation;
 		vel = b2Vec2(0,-GRAVITY_Y);
 		pbody->body->SetLinearVelocity(vel);
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;

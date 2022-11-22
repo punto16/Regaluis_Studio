@@ -58,6 +58,9 @@
     <ClCompile Include="Source\ModuleFonts.cpp">
       <Filter>UtilityModules</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Pathfinding.cpp">
+      <Filter>UtilityModules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -143,6 +146,9 @@
       <Filter>UtilityModules</Filter>
     </ClInclude>
     <ClInclude Include="Source\resource.h" />
+    <ClInclude Include="Source\Pathfinding.h">
+      <Filter>UtilityModules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

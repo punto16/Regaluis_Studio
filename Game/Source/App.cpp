@@ -12,6 +12,7 @@
 #include "ModuleFadeToBlack.h"
 #include "SceneIntro.h"
 #include "ModuleFonts.h"
+#include "Pathfinding.h"
 
 
 #include "Defs.h"
@@ -40,6 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fade = new ModuleFadeToBlack(true);
 	sceneIntro = new SceneIntro(true);
 	fonts = new ModuleFonts(true);
+	pathfinding = new PathFinding(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -49,6 +51,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	//L07 DONE 2: Add Physics module
 	AddModule(physics);
+	AddModule(pathfinding);
 	AddModule(scene);
 	AddModule(entityManager);
 	AddModule(map);

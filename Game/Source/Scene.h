@@ -65,6 +65,14 @@ public:
 private:
 	SDL_Texture* img;
 
+	// Texture to highligh mouse position 
+	SDL_Texture* mouseTileTex;
+	SDL_Texture* originTex;
+
+	// L12: Debug pathfing
+	iPoint origin;
+	bool originSelected = false;
+
 };
 
 #endif // __SCENE_H__

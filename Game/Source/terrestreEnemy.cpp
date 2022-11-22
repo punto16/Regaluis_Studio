@@ -85,6 +85,7 @@ bool TerrestreEnemy::Start() {
 	tebody = app->physics->CreateRectangle(initialPosition.x + 14, initialPosition.y + 6, 28,12, bodyType::DYNAMIC);
 	tebody->listener = this;
 	tebody->ctype = ColliderType::TERRESTREENEMY;
+	tebody->body->SetFixedRotation(1);
 	app->map->enemies.Add(tebody);
 
 	currentAnimation = &idleAnimation;
@@ -102,18 +103,18 @@ bool TerrestreEnemy::Start() {
 bool TerrestreEnemy::Update()
 {
 	//delete the enemies that has been killed
-	if (pendingToSetInactive != nullptr)
+	if (pendingToSetInactive != nullptr && pendingToSetInactive->body->GetLinearVelocity().y == 0)
 	{
 		pendingToSetInactive->body->SetActive(false);
 		pendingToSetInactive = nullptr;
 	}
 
 	PhysBody* pbody = app->scene->player->getPbody();
+	b2Vec2 vel;
 
 
 	if (alive)
 	{
-		b2Vec2 vel;
 		if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
 		{
 			vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
@@ -140,14 +141,15 @@ bool TerrestreEnemy::Update()
 			}
 			currentAnimation = &walkRightAnimation;
 		}
-		tebody->body->SetLinearVelocity(vel);
-
 	}
 	else if (!alive)
 	{
 		currentAnimation = &deadAnimation;
+		vel = b2Vec2(0, -GRAVITY_Y);
+		position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
 	}
-
+	
+	tebody->body->SetLinearVelocity(vel);
 	position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
 	position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
 

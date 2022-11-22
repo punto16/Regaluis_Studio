@@ -23,7 +23,7 @@ class ModuleFonts;
 //added later
 class ModuleFadeToBlack;
 class SceneIntro;
-
+class PathFinding;
 //L07 DONE 2: Add Physics module
 class Physics;
 
@@ -107,6 +107,7 @@ public:
 
 	ModuleFadeToBlack* fade = nullptr;
 	SceneIntro* sceneIntro = nullptr;
+	PathFinding* pathfinding = nullptr;
 
 private:
 

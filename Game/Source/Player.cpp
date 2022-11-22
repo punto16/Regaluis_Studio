@@ -215,6 +215,7 @@ bool Player::Update()
 	else if (!alive)
 	{
 		currentAnimation = &deadAnimation;
+		pbody->body->SetActive(false);
 	}
 	else if (winning)
 	{
@@ -285,17 +286,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::TERRESTREENEMY:
 			LOG("Collision TerrestreEnemy");
-			if (!jumping && !app->scene->godMode)
-			{
-				alive = false;
-				app->sceneIntro->Win = false;
-				app->sceneIntro->beforePlay = false;
-				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
-			}
-			else 
-			{
-				pbody->body->SetLinearVelocity( b2Vec2(0,-20.0f));
-			}
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;

@@ -102,13 +102,6 @@ bool TerrestreEnemy::Start() {
 
 bool TerrestreEnemy::Update()
 {
-	//delete the enemies that has been killed
-	if (pendingToSetInactive != nullptr && pendingToSetInactive->body->GetLinearVelocity().y == 0)
-	{
-		pendingToSetInactive->body->SetActive(false);
-		pendingToSetInactive = nullptr;
-	}
-
 	PhysBody* pbody = app->scene->player->getPbody();
 	b2Vec2 vel;
 
@@ -147,6 +140,7 @@ bool TerrestreEnemy::Update()
 		currentAnimation = &deadAnimation;
 		vel = b2Vec2(0, -GRAVITY_Y);
 		position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
+		tebody->body->SetActive(false);
 	}
 	
 	tebody->body->SetLinearVelocity(vel);
@@ -157,11 +151,6 @@ bool TerrestreEnemy::Update()
 	currentAnimation->Update();
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y - 9, &rect);
-
-
-
-
-
 
 
 	return true;
@@ -202,11 +191,28 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::PLAYER:
 			LOG("TERRESTRE ENEMY Collision Player");
-			if (app->scene->player->jumping && !app->scene->godMode)
+			int py, tey;
+			py = METERS_TO_PIXELS(physB->body->GetPosition().y);
+			tey = METERS_TO_PIXELS(physA->body->GetPosition().y);
+
+			if (!app->scene->godMode &&
+				alive &&
+				app->scene->player->alive &&
+				py + app->scene->player->getPbody()->height <= tey)
 			{
 				alive = false;
-				pendingToSetInactive = physA;
-				//this->Disable();
+				app->scene->player->getPbody()->body->SetLinearVelocity(b2Vec2(0, -20.0f));
+
+			}
+			else if (	!app->scene->godMode && 
+						app->scene->player->alive && 
+						alive &&
+						tey + physA->height <= py)
+			{
+				app->scene->player->alive = false;
+				app->sceneIntro->Win = false;
+				app->sceneIntro->beforePlay = false;
+				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
 			}
 		case ColliderType::UNKNOWN:
 			LOG("TERRESTRE ENEMY Collision UNKNOWN");

@@ -42,14 +42,15 @@ public:
 	bool jumping;
 	int jumpsRemaining;
 
+	bool alive;
+	bool winning;
+
 private:
 
 	//L02: DONE 1: Declare player parameters
 	SDL_Texture* texture;
 	const char* texturePath;
 
-	bool alive;
-	bool winning;
 	
 
 	//animations

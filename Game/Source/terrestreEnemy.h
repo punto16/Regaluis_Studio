@@ -43,9 +43,7 @@ public:
 	//}
 
 	PhysBody* pendingToSetInactive;
-
-	bool canJump;
-	int jumpForce;
+	PhysBody* tebody;
 
 private:
 

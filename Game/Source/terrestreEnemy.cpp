@@ -80,16 +80,12 @@ bool TerrestreEnemy::Start() {
 	texture = app->tex->Load(texturePath);
 	currentAnimation = &idleAnimation;
 
-	alive = true;
-
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	PhysBody* tebody;
 
 	tebody = app->physics->CreateRectangle(initialPosition.x + 14, initialPosition.y + 6, 28,12, bodyType::DYNAMIC);
 	tebody->listener = this;
 	tebody->ctype = ColliderType::TERRESTREENEMY;
 	app->map->enemies.Add(tebody);
-
 
 	currentAnimation = &idleAnimation;
 
@@ -112,51 +108,39 @@ bool TerrestreEnemy::Update()
 		pendingToSetInactive = nullptr;
 	}
 
+	PhysBody* pbody = app->scene->player->getPbody();
+
+
 	if (alive)
 	{
-		ListItem<PhysBody*>* ItemListTE = app->map->enemies.start;
-		PhysBody* tebody;
-		PhysBody* pbody = app->scene->player->getPbody();
-
-		while (ItemListTE != NULL)
+		b2Vec2 vel;
+		if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
 		{
-			tebody = ItemListTE->data;
-
-			if (ItemListTE->data->body->IsActive())
+			vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+			float32 speed = 5.0f;
+			//move to left
+			b2Vec2 force = { -speed, 0 };
+			tebody->body->ApplyForceToCenter(force, true);
+			if (vel.x < -3)
 			{
-				b2Vec2 vel;
-				if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
-				{
-					vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-					float32 speed = 5.0f;
-					//move to left
-					b2Vec2 force = { -speed, 0 };
-					tebody->body->ApplyForceToCenter(force, true);
-					if (vel.x < -3)
-					{
-						vel.x = -3;
-					}
-					currentAnimation = &walkLeftAnimation;
-				}
-				else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
-				{
-					vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-					float32 speed = 5.0f;
-					//move to left
-					b2Vec2 force = { speed, 0 };
-					tebody->body->ApplyForceToCenter(force, true);
-					if (vel.x > 3)
-					{
-						vel.x = 3;
-					}
-					currentAnimation = &walkRightAnimation;
-				}
-				tebody->body->SetLinearVelocity(vel);
-				position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
-				position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
+				vel.x = -3;
 			}
-			ItemListTE = ItemListTE->next;
+			currentAnimation = &walkLeftAnimation;
 		}
+		else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+		{
+			vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+			float32 speed = 5.0f;
+			//move to left
+			b2Vec2 force = { speed, 0 };
+			tebody->body->ApplyForceToCenter(force, true);
+			if (vel.x > 3)
+			{
+				vel.x = 3;
+			}
+			currentAnimation = &walkRightAnimation;
+		}
+		tebody->body->SetLinearVelocity(vel);
 
 	}
 	else if (!alive)
@@ -164,13 +148,18 @@ bool TerrestreEnemy::Update()
 		currentAnimation = &deadAnimation;
 	}
 
-
-
+	position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
+	position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
 
 	//blit sprite at the end
 	currentAnimation->Update();
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y - 9, &rect);
+
+
+
+
+
 
 
 	return true;

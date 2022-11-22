@@ -163,11 +163,11 @@ bool Scene::Update(float dt)
 	{
 		app->render->camera.y = -1 * scale * (player->position.y - 300 / scale);
 	}
-	else if (player->position.y <= 300 / scale || player->position.y < 0)
+	else if (fixedCamera && player->position.y <= 300 / scale || player->position.y < 0)
 	{
 		app->render->camera.y = 0;
 	}
-	else if (player->position.y >= (app->map->mapData.tileHeight * app->map->mapData.height) - 468 / scale)
+	else if (fixedCamera && player->position.y >= (app->map->mapData.tileHeight * app->map->mapData.height) - 468 / scale)
 	{
 		app->render->camera.y = (1 - scale) * height;
 	}

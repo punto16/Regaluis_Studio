@@ -57,6 +57,12 @@ public:
 
 		return frames[actualFrame];
 	}
+
+	int GetTotalFrames() const
+	{
+		return totalFrames;
+	}
+
 };
 
 #endif

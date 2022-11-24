@@ -356,6 +356,10 @@ bool Scene::CleanUp()
 	app->fonts->UnLoad(blackFont);
 	app->fonts->UnLoad(whiteFont);
 
+	//pathfinding stuff
+	app->tex->UnLoad(mouseTileTex);
+	app->tex->UnLoad(originTex);
+
 	app->map->CleanUp();
 
 	return true;

@@ -15,51 +15,51 @@
 
 TerrestreEnemy::TerrestreEnemy(bool startEnabled) : Entity(EntityType::TERRESTREENEMY)
 {
-	name.Create("TerrestreEnemy");
+	name.Create("terrestreEnemy");
 
-	//animations
-	idleAnimation.PushBack({ 0,0,32,32 });
+	////animations
+	//idleAnimation.PushBack({ 0,0,32,32 });
 
-	walkLeftAnimation.PushBack({ 32 * 1, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 2, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 3, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 4, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 5, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 6, 32 * 0, 32, 32 });
-	walkLeftAnimation.PushBack({ 32 * 0, 32 * 0, 32, 32 });
-	walkLeftAnimation.pingpong = false;
-	walkLeftAnimation.loop = true;
-	walkLeftAnimation.speed = 0.1f;
+	//walkLeftAnimation.PushBack({ 32 * 1, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 2, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 3, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 4, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 5, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 6, 32 * 0, 32, 32 });
+	//walkLeftAnimation.PushBack({ 32 * 0, 32 * 0, 32, 32 });
+	//walkLeftAnimation.pingpong = false;
+	//walkLeftAnimation.loop = true;
+	//walkLeftAnimation.speed = 0.1f;
 
-	walkRightAnimation.PushBack({ 32 * 1, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 2, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 3, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 4, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 5, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 6, 32 * 2, 32, 32 });
-	walkRightAnimation.PushBack({ 32 * 0, 32 * 2, 32, 32 });
-	walkRightAnimation.pingpong = false;
-	walkRightAnimation.loop = true;
-	walkRightAnimation.speed = 0.1f;
+	//walkRightAnimation.PushBack({ 32 * 1, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 2, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 3, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 4, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 5, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 6, 32 * 2, 32, 32 });
+	//walkRightAnimation.PushBack({ 32 * 0, 32 * 2, 32, 32 });
+	//walkRightAnimation.pingpong = false;
+	//walkRightAnimation.loop = true;
+	//walkRightAnimation.speed = 0.1f;
 
-	attackLeftAnimation.PushBack({ 32 * 1, 32 * 1, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 2, 32 * 1, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 3, 32 * 1, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 4, 32 * 1, 32, 32 });
-	walkRightAnimation.pingpong = false;
-	walkRightAnimation.loop = true;
-	walkRightAnimation.speed = 0.1f;
+	//attackLeftAnimation.PushBack({ 32 * 1, 32 * 1, 32, 32 });
+	//attackLeftAnimation.PushBack({ 32 * 2, 32 * 1, 32, 32 });
+	//attackLeftAnimation.PushBack({ 32 * 3, 32 * 1, 32, 32 });
+	//attackLeftAnimation.PushBack({ 32 * 4, 32 * 1, 32, 32 });
+	//attackLeftAnimation.pingpong = false;
+	//attackLeftAnimation.loop = true;
+	//attackLeftAnimation.speed = 0.1f;
 
 
-	attackLeftAnimation.PushBack({ 32 * 1, 32 * 3, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 2, 32 * 3, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 3, 32 * 3, 32, 32 });
-	attackLeftAnimation.PushBack({ 32 * 4, 32 * 3, 32, 32 });
-	walkRightAnimation.pingpong = false;
-	walkRightAnimation.loop = true;
-	walkRightAnimation.speed = 0.1f;
+	//attackRightAnimation.PushBack({ 32 * 1, 32 * 3, 32, 32 });
+	//attackRightAnimation.PushBack({ 32 * 2, 32 * 3, 32, 32 });
+	//attackRightAnimation.PushBack({ 32 * 3, 32 * 3, 32, 32 });
+	//attackRightAnimation.PushBack({ 32 * 4, 32 * 3, 32, 32 });
+	//attackRightAnimation.pingpong = false;
+	//attackRightAnimation.loop = true;
+	//attackRightAnimation.speed = 0.1f;
 
-	deadAnimation.PushBack({ 32 * 6, 32 * 3, 32, 32 });
+	//deadAnimation.PushBack({ 32 * 6, 32 * 3, 32, 32 });
 }
 
 TerrestreEnemy::~TerrestreEnemy() {
@@ -71,6 +71,87 @@ bool TerrestreEnemy::Awake() {
 	initialPosition.x = parameters.attribute("x").as_int();
 	initialPosition.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+
+	//idle anim
+	if (idleAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("idleAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			idleAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+										nodePlayer.attribute("y").as_int(),
+										nodePlayer.attribute("w").as_int(),
+										nodePlayer.attribute("h").as_int() });
+		}
+	}
+	//walk left anim
+	if (walkLeftAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("walkLeftAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			walkLeftAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		walkLeftAnimation.speed = parameters.child("walkLeftAnim").attribute("speed").as_float();
+		walkLeftAnimation.loop = parameters.child("walkLeftAnim").attribute("loop").as_bool();
+	}
+	//walk right anim
+	if (walkRightAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("walkRightAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			walkRightAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		walkRightAnimation.speed = parameters.child("walkRightAnim").attribute("speed").as_float();
+		walkRightAnimation.loop = parameters.child("walkRightAnim").attribute("loop").as_bool();
+	}
+	//attack left anim
+	if (attackLeftAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("attackLeftAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			attackLeftAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		attackLeftAnimation.speed = parameters.child("attackLeftAnim").attribute("speed").as_float();
+		attackLeftAnimation.loop = parameters.child("attackLeftAnim").attribute("loop").as_bool();
+	}
+	//attack right anim
+	if (attackRightAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("attackRightAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			attackRightAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		attackRightAnimation.speed = parameters.child("attackRightAnim").attribute("speed").as_float();
+		attackRightAnimation.loop = parameters.child("attackRightAnim").attribute("loop").as_bool();
+	}
+	//dead anim
+	if (deadAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("deadAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			deadAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+										nodePlayer.attribute("y").as_int(),
+										nodePlayer.attribute("w").as_int(),
+										nodePlayer.attribute("h").as_int() });
+		}
+	}
 
 	return true;
 }

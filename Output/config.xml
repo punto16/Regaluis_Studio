@@ -31,9 +31,108 @@
 		<music path="Assets/Audio/Music/music_spy.ogg"/>
 		<whiteFont texturepath="Assets/Fonts/sprite_font_white.png"/>
 		<blackFont texturepath="Assets/Fonts/sprite_font_black.png"/>
-		<player x="150" y="672" texturepath="Assets/Textures/player1.png"/>
-		<terrestreEnemy x="500" y="672" texturepath="Assets/Textures/cocodrileEnemy.png"/>
-		<terrestreEnemy x="400" y="500" texturepath="Assets/Textures/cocodrileEnemy.png"/>
+		<player x="150" y="672" texturepath="Assets/Textures/player1.png">
+			<idleAnim>
+				<pushback x="0" y="0" w="30" h="30"/>
+			</idleAnim>
+			<jumpLeftAnim>
+				<pushback x="30" y="0" w="30" h="30"/> 
+			</jumpLeftAnim>
+			<jumpRightAnim>
+				<pushback x="60" y="0" w="30" h="30"/>
+			</jumpRightAnim>
+			<walkLeftAnim speed="0.1f" loop="true">
+				<pushback x="90" y="0" w="30" h="30"/>
+				<pushback x="120" y="0" w="30" h="30"/>
+				<pushback x="0" y="30" w="30" h="30"/>
+				<pushback x="120" y="0" w="30" h="30"/>
+			</walkLeftAnim>
+			<walkRightAnim speed="0.1f" loop="true">
+				<pushback x="30" y="30" w="30" h="30"/>
+				<pushback x="60" y="30" w="30" h="30"/>
+				<pushback x="90" y="30" w="30" h="30"/>
+				<pushback x="60" y="30" w="30" h="30"/>
+			</walkRightAnim>
+			<deadAnim>
+				<pushback x="120" y="30" w="30" h="30"/>
+			</deadAnim>
+		</player>
+		<terrestreEnemy x="500" y="672" texturepath="Assets/Textures/cocodrileEnemy.png">
+			<idleAnim>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</idleAnim>
+			<walkLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="0" w="32" h="32"/>
+				<pushback x="64" y="0" w="32" h="32"/>
+				<pushback x="96" y="0" w="32" h="32"/>
+				<pushback x="128" y="0" w="32" h="32"/>
+				<pushback x="160" y="0" w="32" h="32"/>
+				<pushback x="192" y="0" w="32" h="32"/>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</walkLeftAnim>
+			<walkRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="64" w="32" h="32"/>
+				<pushback x="64" y="64" w="32" h="32"/>
+				<pushback x="96" y="64" w="32" h="32"/>
+				<pushback x="128" y="64" w="32" h="32"/>
+				<pushback x="160" y="64" w="32" h="32"/>
+				<pushback x="192" y="64" w="32" h="32"/>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</walkRightAnim>
+			<attackLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="32" w="32" h="32"/>
+				<pushback x="64" y="32" w="32" h="32"/>
+				<pushback x="96" y="32" w="32" h="32"/>
+				<pushback x="128" y="32" w="32" h="32"/>
+			</attackLeftAnim>
+			<attackRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="96" w="32" h="32"/>
+				<pushback x="64" y="96" w="32" h="32"/>
+				<pushback x="96" y="96" w="32" h="32"/>
+				<pushback x="128" y="96" w="32" h="32"/>
+			</attackRightAnim>
+			<deadAnim>
+				<pushback x="192" y="96" w="32" h="32"/>
+			</deadAnim>
+		</terrestreEnemy>
+		<terrestreEnemy x="400" y="500" texturepath="Assets/Textures/cocodrileEnemy.png">
+			<idleAnim>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</idleAnim>
+			<walkLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="0" w="32" h="32"/>
+				<pushback x="64" y="0" w="32" h="32"/>
+				<pushback x="96" y="0" w="32" h="32"/>
+				<pushback x="128" y="0" w="32" h="32"/>
+				<pushback x="160" y="0" w="32" h="32"/>
+				<pushback x="192" y="0" w="32" h="32"/>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</walkLeftAnim>
+			<walkRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="64" w="32" h="32"/>
+				<pushback x="64" y="64" w="32" h="32"/>
+				<pushback x="96" y="64" w="32" h="32"/>
+				<pushback x="128" y="64" w="32" h="32"/>
+				<pushback x="160" y="64" w="32" h="32"/>
+				<pushback x="192" y="64" w="32" h="32"/>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</walkRightAnim>
+			<attackLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="32" w="32" h="32"/>
+				<pushback x="64" y="32" w="32" h="32"/>
+				<pushback x="96" y="32" w="32" h="32"/>
+				<pushback x="128" y="32" w="32" h="32"/>
+			</attackLeftAnim>
+			<attackRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="96" w="32" h="32"/>
+				<pushback x="64" y="96" w="32" h="32"/>
+				<pushback x="96" y="96" w="32" h="32"/>
+				<pushback x="128" y="96" w="32" h="32"/>
+			</attackRightAnim>
+			<deadAnim>
+				<pushback x="192" y="96" w="32" h="32"/>
+			</deadAnim>
+		</terrestreEnemy>
 		<map>
 			<mapfolder path="Assets/Maps/"/>
 			<mapfile path="Assets/Maps/MapTemplate.tmx"/>

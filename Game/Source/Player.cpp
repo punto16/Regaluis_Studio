@@ -14,32 +14,8 @@
 
 Player::Player(bool startEnabled) : Entity(EntityType::PLAYER)
 {
-	name.Create("Player");
-	
-	//animations
-	idleAnimation.PushBack({ 0,0,30,30 });
+	name.Create("player");
 
-	jumpLeftAnimation.PushBack({ 30,0,30,30 });
-	
-	jumpRightAnimation.PushBack({ 60,0,30,30 });
-
-	walkLeftAnimation.PushBack({ 90,0,30,30 });
-	walkLeftAnimation.PushBack({ 120,0,30,30 });
-	walkLeftAnimation.PushBack({ 0,30,30,30 });
-	walkLeftAnimation.PushBack({ 120,0,30,30 });
-	walkLeftAnimation.pingpong = false;
-	walkLeftAnimation.loop = true;
-	walkLeftAnimation.speed = 0.1f;
-
-	walkRightAnimation.PushBack({ 30,30,30,30 });
-	walkRightAnimation.PushBack({ 60,30,30,30 });
-	walkRightAnimation.PushBack({ 90,30,30,30 });
-	walkRightAnimation.PushBack({ 60,30,30,30 });
-	walkRightAnimation.pingpong = false;
-	walkRightAnimation.loop = true;
-	walkRightAnimation.speed = 0.1f;
-
-	deadAnimation.PushBack({ 120,30,30,30 });
 }
 
 Player::~Player() {
@@ -48,14 +24,90 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	//L02: DONE 1: Initialize Player parameters
-	//pos = position;
-	//texturePath = "Assets/Textures/player/idle1.png";
-
-	//L02: DONE 5: Get Player parameters from XML
 	initialPosition.x = parameters.attribute("x").as_int();
 	initialPosition.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+
+
+	//idle anim
+	if (idleAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("idleAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			idleAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+										nodePlayer.attribute("y").as_int(),
+										nodePlayer.attribute("w").as_int(),
+										nodePlayer.attribute("h").as_int() });
+		}
+	}
+
+	//jump left anim
+	if (jumpLeftAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("jumpLeftAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			jumpLeftAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+	}
+
+	//jump right anim
+	if (jumpRightAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("jumpRightAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			jumpRightAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+	}
+	//walk left anim
+	if (walkLeftAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("walkLeftAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			walkLeftAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		walkLeftAnimation.speed = parameters.child("walkLeftAnim").attribute("speed").as_float();
+		walkLeftAnimation.loop = parameters.child("walkLeftAnim").attribute("loop").as_bool();
+	}
+	//walk right anim
+	if (walkRightAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("walkRightAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			walkRightAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+		walkRightAnimation.speed = parameters.child("walkRightAnim").attribute("speed").as_float();
+		walkRightAnimation.loop = parameters.child("walkRightAnim").attribute("loop").as_bool();
+	}
+	//dead anim
+	if (deadAnimation.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("deadAnim").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			deadAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
+										nodePlayer.attribute("y").as_int(),
+										nodePlayer.attribute("w").as_int(),
+										nodePlayer.attribute("h").as_int() });
+		}
+	}
+
 
 	jumping = false;
 

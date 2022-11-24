@@ -5,15 +5,16 @@
 	<textures />
 	<audio />
 	<:anonymous />
+	<pathfinding />
 	<scene>
-		<player x="203" y="688" velx="0" vely="0.800000012" jumpsRemaining="2" />
+		<player x="185" y="600" velx="1.65775728" vely="-6.93333673" jumpsRemaining="1" />
 	</scene>
 	<entitymanager />
 	<map />
 	<:anonymous />
-	<scene />
+	<sceneIntro />
 	<:anonymous />
 	<renderer>
-		<camera x="-74" y="-768" />
+		<camera x="-38" y="-768" />
 	</renderer>
 </save_state>

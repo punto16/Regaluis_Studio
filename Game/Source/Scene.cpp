@@ -37,6 +37,8 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
+	app->physics->pause = false;
+
 	//AWAKE ACHICOPLAO
 
 	pugi::xml_node configNode = app->LoadConfigFileToVar();

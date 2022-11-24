@@ -44,27 +44,42 @@ bool Physics::Start()
 bool Physics::PreUpdate()
 {
 	bool ret = true;
-	world->Step(1.0f / 60.0f, 6, 2);
 
-	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
+	if (!pause)
 	{
-		if (c->IsTouching() && c->GetFixtureA()->IsSensor())
+		world->Step(1.0f / 60.0f, 6, 2);
+		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 		{
-			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-
-			if (pb1 && pb2 && pb1->listener)
+			if (c->IsTouching() && c->GetFixtureA()->IsSensor())
 			{
-				pb1->listener->OnCollision(pb1, pb2);
+				PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+				PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
+
+				if (pb1 && pb2 && pb1->listener)
+				{
+					pb1->listener->OnCollision(pb1, pb2);
+				}
 			}
 		}
 	}
 
-
 	return ret;
 }
 
+bool Physics::Update(float dt)
+{
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		Pause();
+	}
 
+	return true;
+}
+
+void Physics::Pause()
+{
+	pause = !pause;
+}
 
 PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType type)
 {

@@ -183,56 +183,58 @@ bool TerrestreEnemy::Start() {
 
 bool TerrestreEnemy::Update()
 {
-	PhysBody* pbody = app->scene->player->getPbody();
-	b2Vec2 vel;
+	if (!app->physics->pause)
+	{
+		PhysBody* pbody = app->scene->player->getPbody();
+		b2Vec2 vel;
 
 
-	if (alive)
-	{
-		if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
+		if (alive)
 		{
-			vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-			float32 speed = 5.0f;
-			//move to left
-			b2Vec2 force = { -speed, 0 };
-			tebody->body->ApplyForceToCenter(force, true);
-			if (vel.x < -3)
+			if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
 			{
-				vel.x = -3;
+				vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+				float32 speed = 5.0f;
+				//move to left
+				b2Vec2 force = { -speed, 0 };
+				tebody->body->ApplyForceToCenter(force, true);
+				if (vel.x < -3)
+				{
+					vel.x = -3;
+				}
+				currentAnimation = &walkLeftAnimation;
 			}
-			currentAnimation = &walkLeftAnimation;
+			else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+			{
+				vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+				float32 speed = 5.0f;
+				//move to left
+				b2Vec2 force = { speed, 0 };
+				tebody->body->ApplyForceToCenter(force, true);
+				if (vel.x > 3)
+				{
+					vel.x = 3;
+				}
+				currentAnimation = &walkRightAnimation;
+			}
 		}
-		else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+		else if (!alive)
 		{
-			vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-			float32 speed = 5.0f;
-			//move to left
-			b2Vec2 force = { speed, 0 };
-			tebody->body->ApplyForceToCenter(force, true);
-			if (vel.x > 3)
-			{
-				vel.x = 3;
-			}
-			currentAnimation = &walkRightAnimation;
+			currentAnimation = &deadAnimation;
+			vel = b2Vec2(0, -GRAVITY_Y);
+			position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
+			tebody->body->SetActive(false);
 		}
-	}
-	else if (!alive)
-	{
-		currentAnimation = &deadAnimation;
-		vel = b2Vec2(0, -GRAVITY_Y);
+
+		tebody->body->SetLinearVelocity(vel);
+		position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
 		position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
-		tebody->body->SetActive(false);
-	}
-	
-	tebody->body->SetLinearVelocity(vel);
-	position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
-	position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
 
-	//blit sprite at the end
-	currentAnimation->Update();
+		//blit sprite at the end
+		currentAnimation->Update();
+	}
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y - 9, &rect);
-
 
 	return true;
 }
@@ -279,16 +281,16 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			if (!app->scene->godMode &&
 				alive &&
 				app->scene->player->alive &&
-				py + app->scene->player->getPbody()->height <= tey)
+				py + physB->height + 3 <= tey)
 			{
 				alive = false;
-				app->scene->player->getPbody()->body->SetLinearVelocity(b2Vec2(0, -20.0f));
+				physB->body->SetLinearVelocity(b2Vec2(0, -20.0f));
 
 			}
 			else if (	!app->scene->godMode && 
 						app->scene->player->alive && 
 						alive &&
-						tey + physA->height <= py)
+						tey < physA->height + 4 + py) 
 			{
 				app->scene->player->alive = false;
 				app->sceneIntro->Win = false;

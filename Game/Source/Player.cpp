@@ -149,141 +149,146 @@ bool Player::Start() {
 bool Player::Update()
 {
 	// L07 DONE 5: Add physics to the player - updated player position using physics
-
-	float32 speed = 50;
-
-	b2Vec2 vel;
-	
-	//vel = b2Vec2(0, -GRAVITY_Y - jumpForce);
-
-	if (app->scene->godMode)
+	if (!app->physics->pause)
 	{
-		pbody->body->SetGravityScale(0);
-		vel = b2Vec2(0, 0);
-		alive = true;
-		speed = 600.0f;
-	}
-	else
-	{
-		vel = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
-		pbody->body->SetGravityScale(1);
-	}
+		float32 speed = 50;
 
-	if (alive && !winning)
-	{
-		////L02: DONE 4: modify the position of the player using arrow keys and render the texture
+		b2Vec2 vel;
 
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
+		//vel = b2Vec2(0, -GRAVITY_Y - jumpForce);
+
+		if (app->scene->godMode)
 		{
-			app->scene->fixedCamera = true;
-			b2Vec2 force = { -speed, 0 };
-			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.x < -8)
-			{
-				vel.x = -8;
-			}
-			if (jumping)
-			{
-				currentAnimation = &jumpLeftAnimation;
-			}
-			else
-			{
-				currentAnimation = &walkLeftAnimation;
-			}
+			pbody->body->SetGravityScale(0);
+			vel = b2Vec2(0, 0);
+			alive = true;
+			speed = 600.0f;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
+		else
 		{
-			app->scene->fixedCamera = true;
-			b2Vec2 force = { speed, 0 };
-			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.x > 8)
-			{
-				vel.x = 8;
-			}
-			if (jumping)
-			{
-				currentAnimation = &jumpRightAnimation;
-			}
-			else
-			{
-				currentAnimation = &walkRightAnimation;
-			}
-		}
-	
-		//with godmode
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->scene->godMode) 
-		{
-			app->scene->fixedCamera = true;
-			b2Vec2 force = { 0, speed };
-			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.y < -30)
-			{
-				vel.y = -30;
-			}
-		}
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->scene->godMode) 
-		{
-			app->scene->fixedCamera = true;
-			b2Vec2 force = { 0, -speed };
-			pbody->body->ApplyForceToCenter(force, true);
-			if (vel.y > 30)
-			{
-				vel.y = 30;
-			}
-			pbody->GetRotation();
+			vel = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+			pbody->body->SetGravityScale(1);
 		}
 
-		//jump
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->scene->godMode && jumpsRemaining > 0) 
+		if (alive && !winning)
 		{
-			app->scene->fixedCamera = true;
-			vel.y = -20.0f;
-			jumping = true;
-			jumpsRemaining--;
-		}
+			////L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
-		//set idle animation if not moving
-		if (app->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_IDLE &&
-			app->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_IDLE &&
-			!jumping)
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+			{
+				app->scene->fixedCamera = true;
+				b2Vec2 force = { -speed, 0 };
+				pbody->body->ApplyForceToCenter(force, true);
+				if (vel.x < -8)
+				{
+					vel.x = -8;
+				}
+				if (jumping)
+				{
+					currentAnimation = &jumpLeftAnimation;
+				}
+				else
+				{
+					currentAnimation = &walkLeftAnimation;
+				}
+			}
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+			{
+				app->scene->fixedCamera = true;
+				b2Vec2 force = { speed, 0 };
+				pbody->body->ApplyForceToCenter(force, true);
+				if (vel.x > 8)
+				{
+					vel.x = 8;
+				}
+				if (jumping)
+				{
+					currentAnimation = &jumpRightAnimation;
+				}
+				else
+				{
+					currentAnimation = &walkRightAnimation;
+				}
+			}
+
+			//with godmode
+			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->scene->godMode)
+			{
+				app->scene->fixedCamera = true;
+				b2Vec2 force = { 0, speed };
+				pbody->body->ApplyForceToCenter(force, true);
+				if (vel.y < -30)
+				{
+					vel.y = -30;
+				}
+			}
+			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->scene->godMode)
+			{
+				app->scene->fixedCamera = true;
+				b2Vec2 force = { 0, -speed };
+				pbody->body->ApplyForceToCenter(force, true);
+				if (vel.y > 30)
+				{
+					vel.y = 30;
+				}
+				pbody->GetRotation();
+			}
+
+			//jump
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->scene->godMode && jumpsRemaining > 0)
+			{
+				app->scene->fixedCamera = true;
+				vel.y = -20.0f;
+				jumping = true;
+				jumpsRemaining--;
+			}
+
+			//set idle animation if not moving
+			if (app->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_IDLE &&
+				app->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_IDLE &&
+				!jumping)
+			{
+				currentAnimation = &idleAnimation;
+				vel.x = 0;
+			}
+
+			//Set the velocity of the pbody of the player
+			pbody->body->SetLinearVelocity(vel);
+
+			//sets aura at the same position as player hitbo
+			//pbody->GetPosition(playerAuraX,playerAuraY);
+			//pbodyAura->SetPosition(playerAuraX + 7, playerAuraY);
+
+			//Update player position in pixels
+			position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
+			position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
+
+
+		}
+		else if (!alive)
+		{
+			currentAnimation = &deadAnimation;
+			pbody->body->SetActive(false);
+		}
+		else if (winning)
 		{
 			currentAnimation = &idleAnimation;
-			vel.x = 0;
+			vel = b2Vec2(0, -GRAVITY_Y);
+			pbody->body->SetLinearVelocity(vel);
+			position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 		}
 
-		//Set the velocity of the pbody of the player
-		pbody->body->SetLinearVelocity(vel);
-
-		//sets aura at the same position as player hitbo
-		//pbody->GetPosition(playerAuraX,playerAuraY);
-		//pbodyAura->SetPosition(playerAuraX + 7, playerAuraY);
-
-		//Update player position in pixels
-		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
-		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
-
+		//updates animation and draws it
+		currentAnimation->Update();
 
 	}
-	else if (!alive)
-	{
-		currentAnimation = &deadAnimation;
-		pbody->body->SetActive(false);
-	}
-	else if (winning)
-	{
-		currentAnimation = &idleAnimation;
-		vel = b2Vec2(0,-GRAVITY_Y);
-		pbody->body->SetLinearVelocity(vel);
-		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
-	}
-
-	
-
-
-	//updates animation and draws it
-	currentAnimation->Update();
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y + 2, &rect);
+
+	if (!alive || winning && pbody->body->GetLinearVelocity().y == 0)
+	{
+		app->physics->pause = true;
+	}
 
 	return true;
 }

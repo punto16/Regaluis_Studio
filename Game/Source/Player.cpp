@@ -331,7 +331,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 				alive = false;
 				app->sceneIntro->Win = false;
 				app->sceneIntro->beforePlay = false;
-				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
+				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 20);
 			}
 			break;
 		case ColliderType::VICTORY:
@@ -339,7 +339,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			winning = true;
 			app->sceneIntro->Win = true;
 			app->sceneIntro->beforePlay = false;
-			app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
+			app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 20);
 			break;
 		case ColliderType::TERRESTREENEMY:
 			LOG("Collision TerrestreEnemy");

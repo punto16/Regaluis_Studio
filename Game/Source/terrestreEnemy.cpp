@@ -295,7 +295,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 				app->scene->player->alive = false;
 				app->sceneIntro->Win = false;
 				app->sceneIntro->beforePlay = false;
-				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 60);
+				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 20);
 			}
 		case ColliderType::UNKNOWN:
 			LOG("TERRESTRE ENEMY Collision UNKNOWN");

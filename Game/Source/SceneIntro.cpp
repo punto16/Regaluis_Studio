@@ -65,7 +65,7 @@ bool SceneIntro::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN ||
 		app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		app->fade->FadeToBlack(this, (Module*)app->scene, 60);
+		app->fade->FadeToBlack(this, (Module*)app->scene, 20);
 	}
 
 

@@ -55,7 +55,7 @@ bool Scene::Start()
 	player->parameters = config.child("player");
 
 
-	//create 1 terrestre enemy
+	//create terrestre enemy
 	configNode = app->LoadConfigFileToVar();
 	config = configNode.child(name.GetString());
 
@@ -74,11 +74,10 @@ bool Scene::Start()
 
 
 	char lookupTable[] = { "abcdefghijklmnopqrstuvwxyz 0123456789.,;:$#'! /?%&()@ " };
-	blackFont = app->fonts->Load("Assets/Fonts/sprite_font_black.png", lookupTable, 6);
-	whiteFont = app->fonts->Load("Assets/Fonts/sprite_font_white.png", lookupTable, 6);
+	blackFont = app->fonts->Load(config.child("blackFont").attribute("texturepath").as_string(), lookupTable, 6);
+	whiteFont = app->fonts->Load(config.child("whiteFont").attribute("texturepath").as_string(), lookupTable, 6);
 	
-	//img = app->tex->Load("Assets/Textures/test.png");
-	app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
+	app->audio->PlayMusic(config.child("music").attribute("path").as_string());
 	
 	// L03: DONE: Load map
 	app->map->Load(name.GetString());

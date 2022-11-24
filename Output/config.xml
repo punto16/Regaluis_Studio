@@ -1,35 +1,43 @@
 <config>
-  <app>
-    <title>A normal walk in El Pueblo</title>
-    <organization>UPC</organization>
-  </app>
+	<app>
+		<title>A normal walk in El Pueblo</title>
+		<organization>UPC</organization>
+	</app>
 
-  <renderer>
-    <vsync value="true"/>
-  </renderer>
+	<renderer>
+		<vsync value="true"/>
+	</renderer>
 
-  <window>
-    <resolution width="1024" height="768" scale="2"/>
-    <fullscreen value="false"/>
-    <borderless value="false"/>
-    <resizable value="false"/>
-    <fullscreen_window value="false"/>
-  </window>
+	<window>
+		<resolution width="1024" height="768" scale="2"/>
+		<fullscreen value="false"/>
+		<borderless value="false"/>
+		<resizable value="false"/>
+		<fullscreen_window value="false"/>
+	</window>
 
-  <audio>
-    <music volume="128"/>
-    <fx volume="128"/>
-  </audio>
+	<audio>
+		<music volume="128"/>
+		<fx volume="128"/>
+	</audio>
 
-  <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
-  <scene>
-    <player x="150" y="672" texturepath="Assets/Textures/player1.png"/>
-	<terrestreEnemy x="500" y="672" texturepath="Assets/Textures/cocodrileEnemy.png"/>
-	<terrestreEnemy x="400" y="500" texturepath="Assets/Textures/cocodrileEnemy.png"/>
-  <map>
-    <mapfolder path="Assets/Maps/"/>
-    <mapfile path="Assets/Maps/MapTemplate.tmx"/>
-  </map>
-  </scene>
- 
+	<!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
+	<sceneIntro>
+		<screenIntro texturepath="Assets/Textures/screenIntro.png"/>
+		<loseScreen texturepath="Assets/Textures/LoseScreen.png"/>
+		<winScreen texturepath="Assets/Textures/VictoryScreen.png"/>
+	</sceneIntro>
+	<scene>
+		<music path="Assets/Audio/Music/music_spy.ogg"/>
+		<whiteFont texturepath="Assets/Fonts/sprite_font_white.png"/>
+		<blackFont texturepath="Assets/Fonts/sprite_font_black.png"/>
+		<player x="150" y="672" texturepath="Assets/Textures/player1.png"/>
+		<terrestreEnemy x="500" y="672" texturepath="Assets/Textures/cocodrileEnemy.png"/>
+		<terrestreEnemy x="400" y="500" texturepath="Assets/Textures/cocodrileEnemy.png"/>
+		<map>
+			<mapfolder path="Assets/Maps/"/>
+			<mapfile path="Assets/Maps/MapTemplate.tmx"/>
+		</map>
+	</scene>
+
 </config>

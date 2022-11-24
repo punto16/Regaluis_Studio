@@ -15,7 +15,7 @@
 
 SceneIntro::SceneIntro(bool startEnabled) : Module(startEnabled)
 {
-	name.Create("scene");
+	name.Create("sceneIntro");
 }
 
 // Destructor
@@ -34,10 +34,12 @@ bool SceneIntro::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneIntro::Start()
 {
+	pugi::xml_node configNode = app->LoadConfigFileToVar();
+	pugi::xml_node config = configNode.child(name.GetString());
 
-	StartImage = app->tex->Load("Assets/Textures/screenIntro.png");
-	WinImage = app->tex->Load("Assets/Textures/VictoryScreen.png");
-	LoseImage = app->tex->Load("Assets/Textures/LoseScreen.png");
+	StartImage	=	app->tex->Load(config.child("screenIntro").attribute("texturepath").as_string());
+	LoseImage	=	app->tex->Load(config.child("loseScreen").attribute("texturepath").as_string());
+	WinImage	=	app->tex->Load(config.child("winScreen").attribute("texturepath").as_string());
 
 
 	app->render->camera.x = 0;
@@ -45,22 +47,7 @@ bool SceneIntro::Start()
 
 	
 
-	app->audio->PlayMusic("");
-	
-	// L03: DONE: Load map
-	//app->map->Load();
-
-	//app->entityManager->DisableEntities();
-
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());
-
-	app->win->SetTitle(title.GetString());*/
+	//app->audio->PlayMusic("");
 
 	return true;
 }

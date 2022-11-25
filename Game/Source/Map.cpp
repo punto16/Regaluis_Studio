@@ -336,6 +336,50 @@ iPoint Map::WorldToMap(int x, int y)
     return ret;
 }
 
+// L12: Create walkability map for pathfinding
+bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+    bool ret = false;
+    ListItem<MapLayer*>* item;
+    item = mapData.maplayers.start;
+
+    for (item = mapData.maplayers.start; item != NULL; item = item->next)
+    {
+        MapLayer* layer = item->data;
+        //bug!! not working
+        if (!layer->properties.GetProperty("Navigation")->value)
+            continue;
+
+        uchar* map = new uchar[layer->width * layer->height];
+        memset(map, 1, layer->width * layer->height);
+
+        for (int y = 0; y < mapData.height; ++y)
+        {
+            for (int x = 0; x < mapData.width; ++x)
+            {
+                int i = (y * layer->width) + x;
+
+                int tileId = layer->Get(x, y);
+                TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+                if (tileset != NULL)
+                {
+                    map[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1;
+                }
+            }
+        }
+
+        *buffer = map;
+        width = mapData.width;
+        height = mapData.height;
+        ret = true;
+
+        break;
+    }
+
+    return ret;
+}
+
 // Get relative Tile rectangle
 SDL_Rect TileSet::GetTileRect(int gid) const
 {
@@ -443,7 +487,6 @@ bool Map::CleanUp()
 // Load new map
 bool Map::Load(const char* scene)
 {
-    bool ret = true;
 
     pugi::xml_node configNode = app->LoadConfigFileToVar();
     pugi::xml_node config = configNode.child(scene).child(name.GetString());
@@ -451,6 +494,9 @@ bool Map::Load(const char* scene)
     mapFileName = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
 
+
+
+    bool ret = true;
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
 

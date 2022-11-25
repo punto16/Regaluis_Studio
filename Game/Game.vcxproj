@@ -154,6 +154,9 @@
     <Xml Include="..\Output\config.xml" />
     <Xml Include="..\Output\save_game.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Output\Assets\Maps\MapTemplate.tmx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

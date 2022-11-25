@@ -190,4 +190,9 @@
       <Filter>External\XmlItems</Filter>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Output\Assets\Maps\MapTemplate.tmx">
+      <Filter>External\XmlItems</Filter>
+    </None>
+  </ItemGroup>
 </Project>

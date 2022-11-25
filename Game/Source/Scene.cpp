@@ -84,27 +84,27 @@ bool Scene::Start()
 	app->audio->PlayMusic(config.child("music").attribute("path").as_string());
 	
 	// L03: DONE: Load map
-	app->map->Load(name.GetString());
+	//app->map->Load(name.GetString());
+
+
+	//create walkability map
+	bool retLoad = app->map->Load(name.GetString());
+	 
+	if (retLoad) {
+		int w, h;
+		uchar* data = NULL;
+
+		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
+		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+
+	}
 
 	if (!app->entityManager->isEnabled)
 	{
 		app->entityManager->Enable();
 	}
-
-	//create walkability map
-	//bool retLoad = app->map->Load();
-	// 
-	//if (retLoad) {
-	//	int w, h;
-	//	uchar* data = NULL;
-
-	//	bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
-	//	if (retWalkMap) app->pathfinding->SetMap(w, h, data);
-
-	//	RELEASE_ARRAY(data);
-
-	//}
-
 
 
 	//enable all entities

@@ -16,50 +16,6 @@
 TerrestreEnemy::TerrestreEnemy(bool startEnabled) : Entity(EntityType::TERRESTREENEMY)
 {
 	name.Create("terrestreEnemy");
-
-	////animations
-	//idleAnimation.PushBack({ 0,0,32,32 });
-
-	//walkLeftAnimation.PushBack({ 32 * 1, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 2, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 3, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 4, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 5, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 6, 32 * 0, 32, 32 });
-	//walkLeftAnimation.PushBack({ 32 * 0, 32 * 0, 32, 32 });
-	//walkLeftAnimation.pingpong = false;
-	//walkLeftAnimation.loop = true;
-	//walkLeftAnimation.speed = 0.1f;
-
-	//walkRightAnimation.PushBack({ 32 * 1, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 2, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 3, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 4, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 5, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 6, 32 * 2, 32, 32 });
-	//walkRightAnimation.PushBack({ 32 * 0, 32 * 2, 32, 32 });
-	//walkRightAnimation.pingpong = false;
-	//walkRightAnimation.loop = true;
-	//walkRightAnimation.speed = 0.1f;
-
-	//attackLeftAnimation.PushBack({ 32 * 1, 32 * 1, 32, 32 });
-	//attackLeftAnimation.PushBack({ 32 * 2, 32 * 1, 32, 32 });
-	//attackLeftAnimation.PushBack({ 32 * 3, 32 * 1, 32, 32 });
-	//attackLeftAnimation.PushBack({ 32 * 4, 32 * 1, 32, 32 });
-	//attackLeftAnimation.pingpong = false;
-	//attackLeftAnimation.loop = true;
-	//attackLeftAnimation.speed = 0.1f;
-
-
-	//attackRightAnimation.PushBack({ 32 * 1, 32 * 3, 32, 32 });
-	//attackRightAnimation.PushBack({ 32 * 2, 32 * 3, 32, 32 });
-	//attackRightAnimation.PushBack({ 32 * 3, 32 * 3, 32, 32 });
-	//attackRightAnimation.PushBack({ 32 * 4, 32 * 3, 32, 32 });
-	//attackRightAnimation.pingpong = false;
-	//attackRightAnimation.loop = true;
-	//attackRightAnimation.speed = 0.1f;
-
-	//deadAnimation.PushBack({ 32 * 6, 32 * 3, 32, 32 });
 }
 
 TerrestreEnemy::~TerrestreEnemy() {

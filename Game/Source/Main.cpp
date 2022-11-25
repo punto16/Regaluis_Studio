@@ -2,6 +2,7 @@
 
 #include "Defs.h"
 #include "Log.h"
+#include "MemLeaks.h"
 
 // NOTE: SDL redefines main function
 #include "SDL/include/SDL.h"
@@ -38,6 +39,8 @@ App* app = NULL;
 int main(int argc, char* args[])
 {
 	LOG("Engine starting ...");
+
+	ReportMemoryLeaks();
 
 	Uint32 startingTick;
 

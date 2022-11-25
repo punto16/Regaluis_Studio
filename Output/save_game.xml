@@ -7,7 +7,7 @@
 	<:anonymous />
 	<pathfinding />
 	<scene>
-		<player x="185" y="600" velx="1.65775728" vely="-6.93333673" jumpsRemaining="1" />
+		<player x="51" y="688" velx="0" vely="0.800000012" jumpsRemaining="2" />
 	</scene>
 	<entitymanager />
 	<map />
@@ -15,6 +15,6 @@
 	<sceneIntro />
 	<:anonymous />
 	<renderer>
-		<camera x="-38" y="-768" />
+		<camera x="0" y="-768" />
 	</renderer>
 </save_state>

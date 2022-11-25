@@ -12,6 +12,8 @@
 #include "ModuleFonts.h"
 #include "Pathfinding.h"
 
+#include <math.h>
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -257,8 +259,8 @@ bool Scene::Update(float dt)
 	// L08: DONE 3: Test World to map method
 	int mouseX, mouseY;
 	app->input->GetMousePosition(mouseX, mouseY);
-	iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x / scale , mouseY - app->render->camera.y / scale);
-
+	iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x * (float)1/scale, mouseY - app->render->camera.y * (float)1 / scale);
+	
 	//Convert again the tile coordinates to world coordinates to render the texture of the tile
 	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
 	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);

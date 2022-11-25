@@ -346,7 +346,7 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
     for (item = mapData.maplayers.start; item != NULL; item = item->next)
     {
         MapLayer* layer = item->data;
-        //bug!! not working
+
         if (!layer->properties.GetProperty("Navigation")->value)
             continue;
 

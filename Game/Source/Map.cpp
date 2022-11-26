@@ -63,7 +63,7 @@ void Map::Draw()
                     SDL_Rect r = tileset->GetTileRect(gid);
                     iPoint pos = MapToWorld(x, y);
 
-                    if (mapLayerItem->data->id == 5)     //PARALAX STUFF
+                    if (mapLayerItem->data->name == "Background")//PARALAX STUFF
                     {
                         app->render->DrawTexture(tileset->texture,
                             pos.x - (app->render->camera.x) * 0.3 / app->win->GetScale(),

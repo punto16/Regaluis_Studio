@@ -168,7 +168,23 @@ bool Scene::Update(float dt)
 		fixedCamera = false;
 	}
 
-
+	if (app->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN)
+	{
+		app->win->scale++;
+		if (app->win->scale >= 8)
+		{
+			app->win->scale = 8;
+		}
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN)
+	{
+		app->win->scale--;
+		if (app->win->scale <= 0)
+		{
+			app->win->scale = 1;
+		}
+	}
+	scale = app->win->scale;
 
 
 	//camera fix to player in x axis
@@ -330,11 +346,11 @@ bool Scene::PostUpdate()
 
 	if (app->FPS == 60)
 	{
-		app->fonts->BlitText(10 - app->render->camera.x / scale, 10 - app->render->camera.y / scale, blackFont,"60 fps");
+		app->fonts->BlitText((10 - app->render->camera.x) / scale, (10 - app->render->camera.y) / scale, blackFont,"60 fps");
 	}
 	else if (app->FPS == 30)
 	{
-		app->fonts->BlitText(10 - app->render->camera.x / scale, 10 - app->render->camera.y / scale, blackFont, "30 fps");
+		app->fonts->BlitText((10 - app->render->camera.x) / scale, (10 - app->render->camera.y) / scale, blackFont, "30 fps");
 	}
 	
 	//here should add path of terrestre enemy

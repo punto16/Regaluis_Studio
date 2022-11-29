@@ -173,6 +173,10 @@ bool TerrestreEnemy::Update()
 				}
 				currentAnimation = &walkRightAnimation;
 			}
+			if (tebody->body->GetLinearVelocity().x == 0)
+			{
+				currentAnimation = &idleAnimation;
+			}
 		}
 		else if (!alive)
 		{

@@ -38,7 +38,7 @@ public:
 
 	bool beforePlay = true;
 	bool Win;
-
+	int currentLevel = 1;
 
 private:
 

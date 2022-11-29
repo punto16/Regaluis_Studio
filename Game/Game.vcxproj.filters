@@ -191,7 +191,10 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Output\Assets\Maps\MapTemplate.tmx">
+    <None Include="..\Output\Assets\Maps\Level1.tmx">
+      <Filter>External\XmlItems</Filter>
+    </None>
+    <None Include="..\Output\Assets\Maps\Level2.tmx">
       <Filter>External\XmlItems</Filter>
     </None>
   </ItemGroup>

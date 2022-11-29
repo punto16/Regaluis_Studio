@@ -8,6 +8,7 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Window.h"
+#include "SceneIntro.h"
 #include <string.h>
 
 #include <math.h>
@@ -347,7 +348,7 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
     {
         MapLayer* layer = item->data;
 
-        if (!layer->properties.GetProperty("Navigation")->value)
+        if (layer->properties.GetProperty("Navigation") != NULL && !layer->properties.GetProperty("Navigation")->value)
             continue;
 
         uchar* map = new uchar[layer->width * layer->height];
@@ -491,15 +492,15 @@ bool Map::Load(const char* scene)
     pugi::xml_node configNode = app->LoadConfigFileToVar();
     pugi::xml_node config = configNode.child(scene).child(name.GetString());
 
-    mapFileName = config.child("mapfile").attribute("path").as_string();
+    mapFileName[app->sceneIntro->currentLevel] = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
 
 
 
     bool ret = true;
     pugi::xml_document mapFileXML;
-    pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
-
+    pugi::xml_parse_result result = mapFileXML.load_file(mapFileName[app->sceneIntro->currentLevel].GetString());
+    //NEED TO ADD 2ND LEVEL FROM CONFIG
 
 
     if(result == NULL)
@@ -539,7 +540,7 @@ bool Map::Load(const char* scene)
     {
         // L04: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
        
-        LOG("Successfully parsed map XML file :%s", mapFileName.GetString());
+        LOG("Successfully parsed map XML file :%s", mapFileName[app->sceneIntro->currentLevel].GetString());
         LOG("width : %d height : %d",mapData.width,mapData.height);
         LOG("tile_width : %d tile_height : %d",mapData.tileWidth, mapData.tileHeight);
         

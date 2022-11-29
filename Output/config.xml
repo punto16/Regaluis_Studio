@@ -135,7 +135,8 @@
 		</terrestreEnemy>
 		<map>
 			<mapfolder path="Assets/Maps/"/>
-			<mapfile path="Assets/Maps/MapTemplate.tmx"/>
+			<mapfile path="Assets/Maps/Level1.tmx"/>
+			<mapfile path="Assets/Maps/Level2.tmx"/>
 		</map>
 	</scene>
 

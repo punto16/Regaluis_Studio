@@ -336,6 +336,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::VICTORY:
 			LOG("Collision Victory");
+			app->sceneIntro->currentLevel++;
 			winning = true;
 			app->sceneIntro->Win = true;
 			app->sceneIntro->beforePlay = false;

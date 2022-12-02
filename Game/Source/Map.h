@@ -8,7 +8,7 @@
 #include "PugiXml\src\pugixml.hpp"
 
 #define MAX_ARRAY_ELEMENTS 150
-#define MAX_LEVELS 1
+#define MAX_LEVELS 2
 
 // L04: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
@@ -170,7 +170,7 @@ public:
 
 private:
 
-    SString mapFileName[MAX_LEVELS];
+	List<SString> mapFileName;
 	SString mapFolder;
     bool mapLoaded;
 };

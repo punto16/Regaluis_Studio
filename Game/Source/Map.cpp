@@ -492,20 +492,28 @@ bool Map::Load(const char* scene)
     pugi::xml_node configNode = app->LoadConfigFileToVar();
     pugi::xml_node config = configNode.child(scene).child(name.GetString());
 
-    mapFileName[app->sceneIntro->currentLevel] = config.child("mapfile").attribute("path").as_string();
+    //mapFileName[app->sceneIntro->currentLevel] = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
 
+    for (pugi::xml_node nodeMapPath = config.child("mapfile");
+        nodeMapPath; nodeMapPath = nodeMapPath.next_sibling("mapfile"))
+    {
+        mapFileName.Add(nodeMapPath.attribute("path").as_string());
+    }
 
+    for (size_t i = 0; i < mapFileName.Count(); i++)
+    {
+        LOG("String of Path saved: %s",mapFileName[i].GetString());
+    }
 
     bool ret = true;
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapFileName[app->sceneIntro->currentLevel].GetString());
-    //NEED TO ADD 2ND LEVEL FROM CONFIG
 
 
     if(result == NULL)
     {
-        LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
+        LOG("Could not load map xml file %s. pugi error: %s", mapFileName[app->sceneIntro->currentLevel].GetString(), result.description());
         ret = false;
     }
 

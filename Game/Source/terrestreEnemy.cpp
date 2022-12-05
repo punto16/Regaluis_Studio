@@ -141,6 +141,28 @@ bool TerrestreEnemy::Update()
 {
 	if (!app->physics->pause)
 	{
+		//FIRST, I WILL SET THE STATE OF THE TERRESTRE ENEMY
+		if (!alive)
+		{
+			state = STATE::DYING;
+		}
+		//condition if player is REALLY close from terrestre enemy
+		else if (true)
+		{
+			state = STATE::ATTACKING;
+		}
+		//condition if player is close from terrestre enemy
+		else if (true)
+		{
+			state = STATE::AGRESSIVEPATH;
+		}
+		//condition if player is far from terrestre enemy
+		else if (true)
+		{
+			state = STATE::NORMALPATH;
+		}
+
+
 		PhysBody* pbody = app->scene->player->getPbody();
 		b2Vec2 vel;
 
@@ -173,8 +195,10 @@ bool TerrestreEnemy::Update()
 				}
 				currentAnimation = &walkRightAnimation;
 			}
-			if (tebody->body->GetLinearVelocity().x == 0)
+			if (tebody->body->GetLinearVelocity().x == 0 ||
+				abs(pbody->body->GetPosition().x - tebody->body->GetPosition().x) <= PIXEL_TO_METERS(1))
 			{
+				vel.x = 0;
 				currentAnimation = &idleAnimation;
 			}
 		}
@@ -201,7 +225,8 @@ bool TerrestreEnemy::Update()
 
 bool TerrestreEnemy::CleanUp()
 {
-	LOG("Cleanup of the player");
+	LOG("Cleanup of the terrestre enemy");
+	app->tex->UnLoad(texture);
 
 	return true;
 }
@@ -224,10 +249,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			break;
 		case ColliderType::WATER:
 			LOG("TERRESTRE ENEMY Collision Water");
-			if (!app->scene->godMode)
-			{
-				alive = false;
-			}
+			alive = false;
 			break;
 		case ColliderType::VICTORY:
 			LOG("TERRESTRE ENEMY Collision Victory");
@@ -245,7 +267,6 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			{
 				alive = false;
 				physB->body->SetLinearVelocity(b2Vec2(0, -20.0f));
-
 			}
 			else if (	!app->scene->godMode && 
 						app->scene->player->alive && 

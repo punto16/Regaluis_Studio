@@ -337,6 +337,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		case ColliderType::VICTORY:
 			LOG("Collision Victory");
 			app->sceneIntro->currentLevel++;
+			if (app->sceneIntro->currentLevel >= MAX_LEVELS)
+			{
+				app->sceneIntro->currentLevel = 0;
+			}
 			winning = true;
 			app->sceneIntro->Win = true;
 			app->sceneIntro->beforePlay = false;

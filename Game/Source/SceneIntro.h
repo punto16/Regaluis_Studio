@@ -38,6 +38,7 @@ public:
 
 	bool beforePlay = true;
 	bool Win;
+	//CURRENT LEVEL THE PLAYER IS IN, REMEMBER TO SUBSTRACT 1 (IF PLAYER IS IN LEVEL 1, CURRENT LEVEL WILL BE 0)
 	int currentLevel = 0;
 
 private:

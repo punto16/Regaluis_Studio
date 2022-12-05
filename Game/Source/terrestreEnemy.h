@@ -45,6 +45,9 @@ public:
 	PhysBody* pendingToSetInactive;
 	PhysBody* tebody;
 
+	STATE state;
+	iPoint objective;
+
 private:
 
 	//L02: DONE 1: Declare player parameters
@@ -53,7 +56,6 @@ private:
 
 	bool alive;
 
-	STATE state;
 
 	//animations
 	Animation* currentAnimation = nullptr;
@@ -64,8 +66,6 @@ private:
 	Animation attackLeftAnimation;
 	Animation deadAnimation;
 
-	// L07 DONE 5: Add physics to the player - declare a Physics body
-	//PhysBody* tebody;
 
 
 };

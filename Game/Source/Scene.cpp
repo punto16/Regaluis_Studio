@@ -67,6 +67,7 @@ bool Scene::Start()
 	{
 		TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
 		newTerrestreEnemy->parameters = itemNode;
+		terrestreEnemies.Add(newTerrestreEnemy);
 	}
 
 
@@ -262,50 +263,34 @@ bool Scene::Update(float dt)
 		PhysBody* pbody = player->getPbody();
 		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)//stsrt from 1st level
 	{
 		PhysBody* pbody = player->getPbody();
+		app->fade->FadeToBlack(this,this,0);
+		app->sceneIntro->currentLevel = 0;
+		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)//stsrt from 2nd level
+	{
+		PhysBody* pbody = player->getPbody();
+		app->fade->FadeToBlack(this, this, 0);
+		app->sceneIntro->currentLevel = 1;
 		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 
 	// Draw map
 	app->map->Draw();
 
-
-	//does pathfinding clicking with mouse
-	//pathfinding stuff
-	// L08: DONE 3: Test World to map method
-	//int mouseX, mouseY;
-	//app->input->GetMousePosition(mouseX, mouseY);
-	//iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x * (float)1/scale, mouseY - app->render->camera.y * (float)1 / scale);
-	//
-	////Convert again the tile coordinates to world coordinates to render the texture of the tile
-	//iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	//app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
-
-	////Test compute path function
-	//if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	//{
-	//	if (originSelected == true)
-	//	{
-	//		app->pathfinding->CreatePath(origin, mouseTile);
-	//		originSelected = false;
-	//	}
-	//	else
-	//	{
-	//		origin = mouseTile;
-	//		originSelected = true;
-	//		app->pathfinding->ClearLastPath();
-	//	}
-	//}
-
 	//does pathfinding using coord of enemy and player
 	ListItem<PhysBody*>* enemyItem;
 	enemyItem = app->map->enemies.start;
 
+	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
+
 	while (enemyItem != NULL)
 	{
-		if (app->physics->debug)
+		if (terrestreEnemyItem != NULL && terrestreEnemyItem->data->state == STATE::AGRESSIVEPATH)
 		{
 			//origin = { enemyItem->data->body->GetPosition().x, enemyItem->data->body->GetPosition().x };//app->map->WorldToMap(enemyItem->data->body->GetPosition().x - app->render->camera.x * (float)1 / scale, enemyItem->data->body->GetPosition().y - app->render->camera.y * (float)1 / scale);
 			origin.x = enemyItem->data->body->GetPosition().x;
@@ -320,17 +305,21 @@ bool Scene::Update(float dt)
 			for (uint i = 0; i < path->Count(); ++i)
 			{
 				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+				if (i == 1)
+				{
+					terrestreEnemyItem->data->objective.x = PIXEL_TO_METERS(pos.x);
+					terrestreEnemyItem->data->objective.y = PIXEL_TO_METERS(pos.y);
+				}
+				if (app->physics->debug) app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
 			}
-
+			
 			// L12: Debug pathfinding
 			iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-			app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+			if (app->physics->debug) app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 		}
 		enemyItem = enemyItem->next;
+		terrestreEnemyItem = terrestreEnemyItem->next;
 	}
-
-
 
 	return true;
 }
@@ -410,6 +399,17 @@ bool Scene::CleanUp()
 	//pathfinding stuff
 	app->tex->UnLoad(mouseTileTex);
 	app->tex->UnLoad(originTex);
+
+
+	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
+
+	while (terrestreEnemyItem != NULL)
+	{
+		terrestreEnemyItem->data->CleanUp();
+		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
+
+	terrestreEnemies.Clear();
 
 	app->map->CleanUp();
 

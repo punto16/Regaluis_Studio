@@ -139,6 +139,13 @@ bool TerrestreEnemy::Start() {
 
 bool TerrestreEnemy::Update()
 {
+	PhysBody* pbody = app->scene->player->getPbody();
+	b2Vec2 vel, distanceVector;
+	distanceVector = tebody->body->GetPosition() - app->scene->player->getPbody()->body->GetPosition();
+	float distancePlayerTE = distanceVector.Length();
+
+	vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+
 	if (!app->physics->pause)
 	{
 		//FIRST, I WILL SET THE STATE OF THE TERRESTRE ENEMY
@@ -147,31 +154,40 @@ bool TerrestreEnemy::Update()
 			state = STATE::DYING;
 		}
 		//condition if player is REALLY close from terrestre enemy
-		else if (true)
+		else if (distancePlayerTE <= 2)
 		{
 			state = STATE::ATTACKING;
 		}
 		//condition if player is close from terrestre enemy
-		else if (true)
+		else if (distancePlayerTE <= 5)
 		{
 			state = STATE::AGRESSIVEPATH;
 		}
 		//condition if player is far from terrestre enemy
-		else if (true)
+		else if (distancePlayerTE > 5)
 		{
 			state = STATE::NORMALPATH;
 		}
 
 
-		PhysBody* pbody = app->scene->player->getPbody();
-		b2Vec2 vel;
 
 
-		if (alive)
+		switch (state)
 		{
-			if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
+		case STATE::NORMALPATH:
+			//TO IMPLEMENT NORMAL PATH THE IDEA IS -> TAKE THE CLOSER WALL OR PLATFORM COLLIDER -> COMPARE THIS COLLIDER X WITH TE X, AND THEN, MOVE LEFT OR RIGHT.
+			//ANOTHER IDEA IS TO IMPLEMENT MODULE PATHS FROM LAST YEAR PROJECT 1
+			currentAnimation = &idleAnimation;
+			vel.x = 0;
+			break;
+		case STATE::AGRESSIVEPATH:
+			if (abs(objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) - tebody->body->GetPosition().x) <= PIXEL_TO_METERS(1))
 			{
-				vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+				vel.x = 0;
+				currentAnimation = &idleAnimation;
+			}
+			else if (/*pbody->body->GetPosition().x*/ objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= tebody->body->GetPosition().x)
+			{
 				float32 speed = 5.0f;
 				//move to left
 				b2Vec2 force = { -speed, 0 };
@@ -182,9 +198,8 @@ bool TerrestreEnemy::Update()
 				}
 				currentAnimation = &walkLeftAnimation;
 			}
-			else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+			else if (/*pbody->body->GetPosition().x*/ objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) > tebody->body->GetPosition().x)
 			{
-				vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
 				float32 speed = 5.0f;
 				//move to left
 				b2Vec2 force = { speed, 0 };
@@ -195,20 +210,23 @@ bool TerrestreEnemy::Update()
 				}
 				currentAnimation = &walkRightAnimation;
 			}
-			if (tebody->body->GetLinearVelocity().x == 0 ||
-				abs(pbody->body->GetPosition().x - tebody->body->GetPosition().x) <= PIXEL_TO_METERS(1))
-			{
-				vel.x = 0;
-				currentAnimation = &idleAnimation;
-			}
-		}
-		else if (!alive)
-		{
+			break;
+		case STATE::ATTACKING:
+			//the idea is that the te wont move for some frames (loading the attack), he will take the coords of the player when he starts loading, then he will have a force applied as a vector of the position of the te
+			// with respect the first coords taken of the player and do a jump to there.
+			vel.x = 0;
+			currentAnimation = &attackLeftAnimation;
+			break;
+		case STATE::DYING:
 			currentAnimation = &deadAnimation;
 			vel = b2Vec2(0, -GRAVITY_Y);
 			position.y = METERS_TO_PIXELS(tebody->body->GetTransform().p.y) - 16;
 			tebody->body->SetActive(false);
+			break;
+		default:
+			break;
 		}
+
 
 		tebody->body->SetLinearVelocity(vel);
 		position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;
@@ -219,6 +237,7 @@ bool TerrestreEnemy::Update()
 	}
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y - 9, &rect);
+
 
 	return true;
 }

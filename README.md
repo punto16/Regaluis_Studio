@@ -17,6 +17,9 @@ The objective is to reach the end of the level.
  - AWSD to move
  - SPACE to jump
  - SPACE in intro to go into the first level
+ - P to pause the game
+ - + from NumPad to increase scale
+ - - from NumPad to decrease scale
  - F1 to start from the 1st level
  - F3 to start from the beggining of the current level
  - F5 to save the current game state in in a xml file

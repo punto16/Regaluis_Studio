@@ -154,17 +154,17 @@ bool TerrestreEnemy::Update()
 			state = STATE::DYING;
 		}
 		//condition if player is REALLY close from terrestre enemy
-		else if (distancePlayerTE <= 2)
+		else if (distancePlayerTE <= 3)
 		{
 			state = STATE::ATTACKING;
 		}
 		//condition if player is close from terrestre enemy
-		else if (distancePlayerTE <= 5)
+		else if (distancePlayerTE <= 8)
 		{
 			state = STATE::AGRESSIVEPATH;
 		}
 		//condition if player is far from terrestre enemy
-		else if (distancePlayerTE > 5)
+		else if (distancePlayerTE > 8)
 		{
 			state = STATE::NORMALPATH;
 		}

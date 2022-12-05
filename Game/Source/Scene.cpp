@@ -188,7 +188,7 @@ bool Scene::Update(float dt)
 		fixedCamera = true;
 	}
 	scale = app->win->scale;
-
+	
 
 	//camera fix to player in x axis
 	if (fixedCamera && player->position.x > 300 / scale && player->position.x < (app->map->mapData.tileWidth * app->map->mapData.width) - 724 / scale)
@@ -349,8 +349,10 @@ bool Scene::PostUpdate()
 	if (app->physics->debug)
 	{
 		ListItem<PhysBody*>* ItemListTE = app->map->enemies.start;
+		ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
 		PhysBody* tebody;
 		PhysBody* pbody = player->getPbody();
+		
 
 		while (ItemListTE != NULL)
 		{
@@ -361,21 +363,21 @@ bool Scene::PostUpdate()
 
 
 				//ray between terrestre enemy and player
-				app->render->DrawLine(METERS_TO_PIXELS(tebody->body->GetPosition().x),
-					METERS_TO_PIXELS(tebody->body->GetPosition().y),
-					METERS_TO_PIXELS(pbody->body->GetPosition().x),
-					METERS_TO_PIXELS(pbody->body->GetPosition().y),
-					255, 0, 0);//red
+				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+										METERS_TO_PIXELS(pbody->body->GetPosition().x),
+										METERS_TO_PIXELS(pbody->body->GetPosition().y),
+										255, 0, 0);//red
 
 				//ray that is the PATH of the terrestre enemy 
-				//PATH IS YET BEING IMPLEMENTED, NOT THE REAL REAL PATHXD
-				app->render->DrawLine(METERS_TO_PIXELS(tebody->body->GetPosition().x),
-					METERS_TO_PIXELS(tebody->body->GetPosition().y),
-					METERS_TO_PIXELS(pbody->body->GetPosition().x),
-					METERS_TO_PIXELS(tebody->body->GetPosition().y),
-					0, 255, 0); //green
+				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+										METERS_TO_PIXELS(terrestreEnemyItem->data->objective.x) + 16,
+										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+										0, 255, 0); //green
 			}
-
+			
+			terrestreEnemyItem = terrestreEnemyItem->next;
 			ItemListTE = ItemListTE->next;
 		}
 	}
@@ -410,7 +412,7 @@ bool Scene::CleanUp()
 	}
 
 	terrestreEnemies.Clear();
-
+	
 	app->map->CleanUp();
 
 	return true;
@@ -419,11 +421,17 @@ bool Scene::CleanUp()
 
 bool Scene::LoadState(pugi::xml_node& data)
 {
-	//camera.x = data.child("camera").attribute("x").as_int();
-	//camera.y = data.child("camera").attribute("y").as_int();
+	int currentLevelBefore = app->sceneIntro->currentLevel;
+	//current level data
+	app->sceneIntro->currentLevel = data.child("CurrentLevel").attribute("CurrentLevel").as_int() - 1;
 
+	if (currentLevelBefore != app->sceneIntro->currentLevel)
+	{
+		app->map->Disable();
+		app->map->Enable();
+	}
+	//PLAYER DATA
 	PhysBody* pbody = player->getPbody();
-
 	pbody->SetPosition(data.child("player").attribute("x").as_int(), data.child("player").attribute("y").as_int());
 	pbody->body->SetLinearVelocity(b2Vec2(data.child("player").attribute("velx").as_int(), data.child("player").attribute("vely").as_int()));
 	player->jumpsRemaining = data.child("player").attribute("jumpsRemaining").as_int();
@@ -435,10 +443,13 @@ bool Scene::LoadState(pugi::xml_node& data)
 // using append_child and append_attribute
 bool Scene::SaveState(pugi::xml_node& data)
 {
-	pugi::xml_node playerNode = data.append_child("player");
+	//current level data
+	pugi::xml_node currentLevelNode = data.append_child("CurrentLevel");
 	
-	//cam.append_attribute("x") = camera.x;
-	//cam.append_attribute("y") = camera.y;
+	currentLevelNode.append_attribute("CurrentLevel") = app->sceneIntro->currentLevel + 1;
+
+	//PLAYER DATA
+	pugi::xml_node playerNode = data.append_child("player");
 
 	playerNode.append_attribute("x") = (player->position.x + 16);
 	playerNode.append_attribute("y") = (player->position.y + 16);
@@ -453,6 +464,10 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	playerNode.append_attribute("vely") = (player->getPbody()->body->GetLinearVelocity().y);
 	playerNode.append_attribute("jumpsRemaining") = (player->jumpsRemaining);
-	
+
+	//terrestre enemies data
+	pugi::xml_node playerNode = data.append_child("TerrestreEnemy");
+
+
 	return true;
 }

@@ -8,6 +8,7 @@
 
 ModuleFadeToBlack::ModuleFadeToBlack(bool startEnabled) : Module(startEnabled)
 {
+	name.Create("fadetoblack");
 }
 
 ModuleFadeToBlack::~ModuleFadeToBlack()

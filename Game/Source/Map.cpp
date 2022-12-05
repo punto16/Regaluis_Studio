@@ -453,6 +453,7 @@ bool Map::CleanUp()
     while (collisionsItem != NULL)
     {
         collisionsItem->data->body->DestroyFixture(collisionsItem->data->body->GetFixtureList());
+        app->physics->world->DestroyBody(collisionsItem->data->body);
         RELEASE(collisionsItem->data);
         collisionsItem = collisionsItem->next;
     }
@@ -465,6 +466,7 @@ bool Map::CleanUp()
     while (playerItem != NULL)
     {
         playerItem->data->body->DestroyFixture(playerItem->data->body->GetFixtureList());
+        app->physics->world->DestroyBody(playerItem->data->body);
         RELEASE(playerItem->data);
         playerItem = playerItem->next;
     }
@@ -477,6 +479,7 @@ bool Map::CleanUp()
     while (enemyItem != NULL)
     {
         enemyItem->data->body->DestroyFixture(enemyItem->data->body->GetFixtureList());
+        app->physics->world->DestroyBody(enemyItem->data->body);
         RELEASE(enemyItem->data);
         enemyItem = enemyItem->next;
     }

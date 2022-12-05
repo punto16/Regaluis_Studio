@@ -20,6 +20,7 @@
 
 Physics::Physics(bool startEnabled) : Module(startEnabled)
 {
+	name.Create("physics");
 	world = NULL;
 	mouse_joint = NULL;
 

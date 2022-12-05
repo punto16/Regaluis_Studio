@@ -130,6 +130,7 @@ bool TerrestreEnemy::Start() {
 	alive = true;
 	
 	state = STATE::NORMALPATH;
+	direction = DIRECTION::LEFT;
 
 	position.x = initialPosition.x;
 	position.y = initialPosition.y;
@@ -159,12 +160,12 @@ bool TerrestreEnemy::Update()
 			state = STATE::ATTACKING;
 		}
 		//condition if player is close from terrestre enemy
-		else if (distancePlayerTE <= 8)
+		else if (distancePlayerTE <= 7)
 		{
 			state = STATE::AGRESSIVEPATH;
 		}
 		//condition if player is far from terrestre enemy
-		else if (distancePlayerTE > 8)
+		else if (distancePlayerTE > 7)
 		{
 			state = STATE::NORMALPATH;
 		}
@@ -183,10 +184,11 @@ bool TerrestreEnemy::Update()
 		case STATE::AGRESSIVEPATH:
 			if (abs(objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) - tebody->body->GetPosition().x) <= PIXEL_TO_METERS(1))
 			{
+				direction = DIRECTION::LEFT;
 				vel.x = 0;
 				currentAnimation = &idleAnimation;
 			}
-			else if (/*pbody->body->GetPosition().x*/ objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= tebody->body->GetPosition().x)
+			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= tebody->body->GetPosition().x)
 			{
 				float32 speed = 5.0f;
 				//move to left
@@ -196,9 +198,10 @@ bool TerrestreEnemy::Update()
 				{
 					vel.x = -3;
 				}
+				direction = DIRECTION::LEFT;
 				currentAnimation = &walkLeftAnimation;
 			}
-			else if (/*pbody->body->GetPosition().x*/ objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) > tebody->body->GetPosition().x)
+			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) > tebody->body->GetPosition().x)
 			{
 				float32 speed = 5.0f;
 				//move to left
@@ -208,6 +211,7 @@ bool TerrestreEnemy::Update()
 				{
 					vel.x = 3;
 				}
+				direction = DIRECTION::RIGHT;
 				currentAnimation = &walkRightAnimation;
 			}
 			break;

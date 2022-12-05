@@ -15,6 +15,11 @@ enum class STATE
 	ATTACKING,
 	DYING
 };
+enum class DIRECTION
+{
+	LEFT,
+	RIGHT
+};
 
 class TerrestreEnemy : public Entity
 {
@@ -37,15 +42,11 @@ public:
 
 public:
 
-	//PhysBody* getTebody()
-	//{
-	//	return tebody;
-	//}
-
-	PhysBody* pendingToSetInactive;
+	//PhysBody* pendingToSetInactive;
 	PhysBody* tebody;
 
 	STATE state;
+	DIRECTION direction;
 	iPoint objective;
 
 private:

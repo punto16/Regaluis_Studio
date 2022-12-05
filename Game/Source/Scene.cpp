@@ -436,6 +436,22 @@ bool Scene::LoadState(pugi::xml_node& data)
 	pbody->body->SetLinearVelocity(b2Vec2(data.child("player").attribute("velx").as_int(), data.child("player").attribute("vely").as_int()));
 	player->jumpsRemaining = data.child("player").attribute("jumpsRemaining").as_int();
 
+
+	//te data
+
+	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
+	pugi::xml_node nodeTE = data.child("TerrestreEnemy");
+	
+	while (terrestreEnemyItem != NULL)
+	{
+		terrestreEnemyItem->data->tebody->SetPosition(nodeTE.attribute("x").as_int(), nodeTE.attribute("y").as_int());
+		terrestreEnemyItem->data->tebody->body->SetLinearVelocity(b2Vec2(nodeTE.attribute("velx").as_int(), nodeTE.attribute("vely").as_int()));
+		terrestreEnemyItem->data->state = (STATE)nodeTE.attribute("STATE").as_int();
+		terrestreEnemyItem->data->direction = (DIRECTION)nodeTE.attribute("DIRECTION").as_int();
+		nodeTE = nodeTE.next_sibling("TerrestreEnemy");
+		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
+
 	return true;
 }
 
@@ -466,7 +482,28 @@ bool Scene::SaveState(pugi::xml_node& data)
 	playerNode.append_attribute("jumpsRemaining") = (player->jumpsRemaining);
 
 	//terrestre enemies data
-	pugi::xml_node playerNode = data.append_child("TerrestreEnemy");
+
+	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
+
+	while (terrestreEnemyItem != NULL)
+	{
+		pugi::xml_node teNode = data.append_child("TerrestreEnemy");
+		teNode.append_attribute("x") = (terrestreEnemyItem->data->position.x + 16);
+		teNode.append_attribute("y") = (terrestreEnemyItem->data->position.y + 16);
+		if (abs(terrestreEnemyItem->data->tebody->body->GetLinearVelocity().x) < 0.5)
+		{
+			teNode.append_attribute("velx") = (0);
+		}
+		else
+		{
+			teNode.append_attribute("velx") = (terrestreEnemyItem->data->tebody->body->GetLinearVelocity().x);
+		}
+		teNode.append_attribute("vely") = (terrestreEnemyItem->data->tebody->body->GetLinearVelocity().y);
+		teNode.append_attribute("STATE") = (int)terrestreEnemyItem->data->state;
+		teNode.append_attribute("DIRECTION") = (int)terrestreEnemyItem->data->direction;
+
+		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
 
 
 	return true;

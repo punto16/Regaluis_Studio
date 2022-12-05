@@ -8,7 +8,7 @@
 
 ModuleFonts::ModuleFonts(bool startEnabled) : Module(startEnabled)
 {
-
+	name.Create("fonts");
 }
 
 ModuleFonts::~ModuleFonts()

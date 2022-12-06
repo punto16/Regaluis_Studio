@@ -369,12 +369,12 @@ bool Scene::PostUpdate()
 										METERS_TO_PIXELS(pbody->body->GetPosition().y),
 										255, 0, 0);//red
 
-				//ray that is the PATH of the terrestre enemy 
-				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
-										METERS_TO_PIXELS(tebody->body->GetPosition().y),
-										METERS_TO_PIXELS(terrestreEnemyItem->data->objective.x) + 16,
-										METERS_TO_PIXELS(tebody->body->GetPosition().y),
-										0, 255, 0); //green
+				////ray that is the PATH of the terrestre enemy 
+				//app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+				//						METERS_TO_PIXELS(tebody->body->GetPosition().y),
+				//						METERS_TO_PIXELS(terrestreEnemyItem->data->objective.x) + 16,
+				//						METERS_TO_PIXELS(tebody->body->GetPosition().y),
+				//						0, 255, 0); //green
 			}
 			
 			terrestreEnemyItem = terrestreEnemyItem->next;

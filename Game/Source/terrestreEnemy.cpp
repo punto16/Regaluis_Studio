@@ -146,6 +146,14 @@ bool TerrestreEnemy::Update()
 	float distancePlayerTE = distanceVector.Length();
 
 	vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+	float32 speed;
+	b2Vec2 force;
+
+	iPoint collisionWithPosition;
+	if (collisionWith != NULL)
+	{
+		collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
+	}
 
 	if (!app->physics->pause)
 	{
@@ -178,8 +186,62 @@ bool TerrestreEnemy::Update()
 		case STATE::NORMALPATH:
 			//TO IMPLEMENT NORMAL PATH THE IDEA IS -> TAKE THE CLOSER WALL OR PLATFORM COLLIDER -> COMPARE THIS COLLIDER X WITH TE X, AND THEN, MOVE LEFT OR RIGHT.
 			//ANOTHER IDEA IS TO IMPLEMENT MODULE PATHS FROM LAST YEAR PROJECT 1
-			currentAnimation = &idleAnimation;
-			vel.x = 0;
+
+
+
+			switch (direction)
+			{
+			case DIRECTION::LEFT:
+				speed = 5.0f;
+				//move to left
+				force = { -speed, 0 };
+				tebody->body->ApplyForceToCenter(force, true);
+				if (vel.x < -1.5f)
+				{
+					vel.x = -1.5f;
+				}
+				if (collisionWith != NULL && collisionWithPosition.x + 5 > position.x)
+				{
+					direction = DIRECTION::RIGHT;
+				}
+				currentAnimation = &walkLeftAnimation;
+				if (app->physics->debug)
+				{
+					//ray that is the PATH of the terrestre enemy 
+					app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+											METERS_TO_PIXELS(tebody->body->GetPosition().y),
+											collisionWithPosition.x,
+											METERS_TO_PIXELS(tebody->body->GetPosition().y),
+											0, 255, 0); //green
+				}
+				break;
+			case DIRECTION::RIGHT:
+				speed = 5.0f;
+				//move to left
+				force = { speed, 0 };
+				tebody->body->ApplyForceToCenter(force, true);
+				if (vel.x > 1.5f)
+				{
+					vel.x = 1.5f;
+				}
+				if (collisionWith != NULL && collisionWithPosition.x + collisionWith->width * 2 - 8 < position.x + tebody->width * 2)
+				{
+					direction = DIRECTION::LEFT;
+				}
+				if (app->physics->debug)
+				{
+					//ray that is the PATH of the terrestre enemy 
+					app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+											METERS_TO_PIXELS(tebody->body->GetPosition().y),
+											collisionWithPosition.x + collisionWith->width * 2,
+											METERS_TO_PIXELS(tebody->body->GetPosition().y),
+											0, 255, 0); //green
+				}
+				currentAnimation = &walkRightAnimation;
+				break;
+			default:
+				break;
+			}
 			break;
 		case STATE::AGRESSIVEPATH:
 			if (abs(objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) - tebody->body->GetPosition().x) <= PIXEL_TO_METERS(1))
@@ -190,9 +252,9 @@ bool TerrestreEnemy::Update()
 			}
 			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= tebody->body->GetPosition().x)
 			{
-				float32 speed = 5.0f;
+				speed = 5.0f;
 				//move to left
-				b2Vec2 force = { -speed, 0 };
+				force = { -speed, 0 };
 				tebody->body->ApplyForceToCenter(force, true);
 				if (vel.x < -3)
 				{
@@ -203,9 +265,9 @@ bool TerrestreEnemy::Update()
 			}
 			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) > tebody->body->GetPosition().x)
 			{
-				float32 speed = 5.0f;
+				speed = 5.0f;
 				//move to left
-				b2Vec2 force = { speed, 0 };
+				force = { speed, 0 };
 				tebody->body->ApplyForceToCenter(force, true);
 				if (vel.x > 3)
 				{
@@ -213,6 +275,14 @@ bool TerrestreEnemy::Update()
 				}
 				direction = DIRECTION::RIGHT;
 				currentAnimation = &walkRightAnimation;
+			}
+			if (app->physics->debug)
+			{
+				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
+										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+										METERS_TO_PIXELS(objective.x) + 16,
+										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+										0, 255, 0); //green
 			}
 			break;
 		case STATE::ATTACKING:
@@ -259,6 +329,10 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::TERRESTREENEMY)
 	{
+		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
+			physB->ctype == ColliderType::WALL) {
+			collisionWith = physB;
+		}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:

@@ -375,6 +375,17 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 				app->sceneIntro->beforePlay = false;
 				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 20);
 			}
+			break;
+		case ColliderType::TERRESTREENEMY:
+			if (direction == DIRECTION::RIGHT)
+			{
+				direction = DIRECTION::LEFT;
+			}
+			else if (direction == DIRECTION::LEFT)
+			{
+				direction = DIRECTION::RIGHT;
+			}
+			break;
 		case ColliderType::UNKNOWN:
 			LOG("TERRESTRE ENEMY Collision UNKNOWN");
 			break;

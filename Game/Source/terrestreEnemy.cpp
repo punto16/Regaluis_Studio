@@ -131,6 +131,8 @@ bool TerrestreEnemy::Start() {
 	
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
+	attackState = chargingAttack;
+	chargingAttackTime = 0;
 
 	position.x = initialPosition.x;
 	position.y = initialPosition.y;
@@ -276,7 +278,7 @@ bool TerrestreEnemy::Update()
 				direction = DIRECTION::RIGHT;
 				currentAnimation = &walkRightAnimation;
 			}
-			if (app->physics->debug)
+			if (app->physics->debug)//ray that is the PATH of the terrestre enemy
 			{
 				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
 										METERS_TO_PIXELS(tebody->body->GetPosition().y),
@@ -288,8 +290,48 @@ bool TerrestreEnemy::Update()
 		case STATE::ATTACKING:
 			//the idea is that the te wont move for some frames (loading the attack), he will take the coords of the player when he starts loading, then he will have a force applied as a vector of the position of the te
 			// with respect the first coords taken of the player and do a jump to there.
-			vel.x = 0;
-			currentAnimation = &attackLeftAnimation;
+
+			switch (attackState)
+			{
+			case chargingAttack:
+				//vel.x = 0;
+				chargingAttackTime++;
+				if ((float)(chargingAttackTime * 1 / 60) >= (float)chargingAttackTimeInSeconds)//if it has loaded for 2 seconds it changes attack state
+				{
+					attackState = jumpAttack;
+				}
+				LOG("CHARGING ATTACK TE STATE");
+				break;
+			case jumpAttack:
+
+				vel = b2Vec2(	(pbody->body->GetPosition().x - tebody->body->GetPosition().x) * 3,
+								(pbody->body->GetPosition().y - tebody->body->GetPosition().y) * 1.5f - 10);
+				//te jumps to bite the player
+				tebody->body->ApplyLinearImpulse(vel, tebody->body->GetPosition(), true);
+				LOG("JUMPING ATTACK TE STATE");
+				chargingAttackTime = 0;
+				attackState = chargingAttack;
+				break;
+			default:
+				break;
+			}
+			if (state != STATE::ATTACKING)
+			{
+				chargingAttackTime = 0;
+			}
+
+
+			switch (direction)
+			{
+			case DIRECTION::LEFT:
+				currentAnimation = &attackLeftAnimation;
+				break;
+			case DIRECTION::RIGHT:
+				currentAnimation = &attackRightAnimation;
+				break;
+			default:
+				break;
+			}
 			break;
 		case STATE::DYING:
 			currentAnimation = &deadAnimation;
@@ -312,7 +354,6 @@ bool TerrestreEnemy::Update()
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y - 9, &rect);
 
-
 	return true;
 }
 
@@ -332,6 +373,10 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
 			physB->ctype == ColliderType::WALL) {
 			collisionWith = physB;
+			if (attackState == jumpAttack)
+			{
+				attackState = chargingAttack;
+			}
 		}
 		switch (physB->ctype)
 		{
@@ -357,6 +402,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			py = METERS_TO_PIXELS(physB->body->GetPosition().y);
 			tey = METERS_TO_PIXELS(physA->body->GetPosition().y);
 
+			//terrestre enemy dies
 			if (!app->scene->godMode &&
 				alive &&
 				app->scene->player->alive &&
@@ -365,6 +411,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 				alive = false;
 				physB->body->SetLinearVelocity(b2Vec2(0, -20.0f));
 			}
+			//player dies
 			else if (	!app->scene->godMode && 
 						app->scene->player->alive && 
 						alive &&
@@ -377,11 +424,11 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			}
 			break;
 		case ColliderType::TERRESTREENEMY:
-			if (direction == DIRECTION::RIGHT)
+			if (direction == DIRECTION::RIGHT && state != STATE::ATTACKING)
 			{
 				direction = DIRECTION::LEFT;
 			}
-			else if (direction == DIRECTION::LEFT)
+			else if (direction == DIRECTION::LEFT && state != STATE::ATTACKING)
 			{
 				direction = DIRECTION::RIGHT;
 			}

@@ -452,6 +452,11 @@ bool Scene::LoadState(pugi::xml_node& data)
 			terrestreEnemyItem->data->alive = true;
 			terrestreEnemyItem->data->tebody->body->SetActive(true);
 		}
+		else
+		{
+			terrestreEnemyItem->data->alive = false;
+			terrestreEnemyItem->data->tebody->body->SetActive(false);
+		}
 		terrestreEnemyItem->data->direction = (DIRECTION)nodeTE.attribute("DIRECTION").as_int();
 		nodeTE = nodeTE.next_sibling("TerrestreEnemy");
 		terrestreEnemyItem = terrestreEnemyItem->next;

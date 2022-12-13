@@ -315,11 +315,16 @@ bool TerrestreEnemy::Update()
 			default:
 				break;
 			}
-			if (state != STATE::ATTACKING)
-			{
-				chargingAttackTime = 0;
-			}
 
+
+			if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
+			{
+				direction = DIRECTION::LEFT;
+			}
+			else if (pbody->body->GetPosition().x > tebody->body->GetPosition().x)
+			{
+				direction = DIRECTION::RIGHT;
+			}
 
 			switch (direction)
 			{
@@ -342,7 +347,10 @@ bool TerrestreEnemy::Update()
 		default:
 			break;
 		}
-
+		if (state != STATE::ATTACKING)
+		{
+			chargingAttackTime = 0;
+		}
 
 		tebody->body->SetLinearVelocity(vel);
 		position.x = METERS_TO_PIXELS(tebody->body->GetTransform().p.x) - 16;

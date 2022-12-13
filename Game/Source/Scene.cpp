@@ -65,9 +65,12 @@ bool Scene::Start()
 
 	for (pugi::xml_node itemNode = config.child("terrestreEnemy"); itemNode; itemNode = itemNode.next_sibling("terrestreEnemy"))
 	{
-		TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
-		newTerrestreEnemy->parameters = itemNode;
-		terrestreEnemies.Add(newTerrestreEnemy);
+		if (config.child("terrestreEnemy").attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
+		{
+			TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
+			newTerrestreEnemy->parameters = itemNode;
+			terrestreEnemies.Add(newTerrestreEnemy);
+		}
 	}
 
 
@@ -260,23 +263,20 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//restart current level
 	{
-		PhysBody* pbody = player->getPbody();
-		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
+		player->getPbody()->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)//stsrt from 1st level
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)//start from 1st level
 	{
-		PhysBody* pbody = player->getPbody();
 		app->fade->FadeToBlack(this,this,0);
 		app->sceneIntro->currentLevel = 0;
-		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
+		player->getPbody()->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)//stsrt from 2nd level
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)//start from 2nd level
 	{
-		PhysBody* pbody = player->getPbody();
 		app->fade->FadeToBlack(this, this, 0);
 		app->sceneIntro->currentLevel = 1;
-		pbody->SetPosition(player->initialPosition.x, player->initialPosition.y);
+		player->getPbody()->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 
 	// Draw map
@@ -427,8 +427,8 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 	if (currentLevelBefore != app->sceneIntro->currentLevel)
 	{
-		app->map->Disable();
-		app->map->Enable();
+		app->scene->Disable();
+		app->scene->Enable();
 	}
 	//PLAYER DATA
 	PhysBody* pbody = player->getPbody();
@@ -447,6 +447,11 @@ bool Scene::LoadState(pugi::xml_node& data)
 		terrestreEnemyItem->data->tebody->SetPosition(nodeTE.attribute("x").as_int(), nodeTE.attribute("y").as_int());
 		terrestreEnemyItem->data->tebody->body->SetLinearVelocity(b2Vec2(nodeTE.attribute("velx").as_int(), nodeTE.attribute("vely").as_int()));
 		terrestreEnemyItem->data->state = (STATE)nodeTE.attribute("STATE").as_int();
+		if (terrestreEnemyItem->data->state != STATE::DYING)
+		{
+			terrestreEnemyItem->data->alive = true;
+			terrestreEnemyItem->data->tebody->body->SetActive(true);
+		}
 		terrestreEnemyItem->data->direction = (DIRECTION)nodeTE.attribute("DIRECTION").as_int();
 		nodeTE = nodeTE.next_sibling("TerrestreEnemy");
 		terrestreEnemyItem = terrestreEnemyItem->next;

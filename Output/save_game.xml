@@ -8,9 +8,9 @@
 	<pathfinding />
 	<scene>
 		<CurrentLevel CurrentLevel="1" />
-		<player x="317" y="688" velx="0" vely="0.800000012" jumpsRemaining="2" />
-		<TerrestreEnemy x="491" y="697" velx="-1.82856941" vely="0.800000012" STATE="1" DIRECTION="0" />
-		<TerrestreEnemy x="434" y="537" velx="1.78793454" vely="0.800000012" STATE="1" DIRECTION="0" />
+		<player x="213" y="688" velx="0" vely="0.800000012" jumpsRemaining="2" />
+		<TerrestreEnemy x="449" y="697" velx="0" vely="16" STATE="3" DIRECTION="1" />
+		<TerrestreEnemy x="461" y="697" velx="-1.5" vely="0.800000012" STATE="0" DIRECTION="0" />
 	</scene>
 	<entitymanager />
 	<map />
@@ -18,6 +18,6 @@
 	<sceneIntro />
 	<fonts />
 	<renderer>
-		<camera x="-302" y="-768" />
+		<camera x="-94" y="-768" />
 	</renderer>
 </save_state>

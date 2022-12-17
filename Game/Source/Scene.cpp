@@ -263,6 +263,7 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//restart current level
 	{
+		app->fade->FadeToBlack(this, this, 0);
 		player->getPbody()->SetPosition(player->initialPosition.x, player->initialPosition.y);
 	}
 
@@ -342,6 +343,11 @@ bool Scene::PostUpdate()
 	else if (app->FPS == 30)
 	{
 		app->fonts->BlitText((10 - app->render->camera.x) * (float)1/scale, (10 - app->render->camera.y) * (float)1/scale, blackFont, "30 fps");
+	}
+
+	if (app->physics->pause)
+	{
+		app->fonts->BlitText((10 - app->render->camera.x) * (float)1 / scale, ((20 * scale) - app->render->camera.y) * (float)1 / scale, blackFont, "game paused");
 	}
 	
 	//here should add path of terrestre enemy

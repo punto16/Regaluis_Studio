@@ -423,13 +423,14 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			else if (	!app->scene->godMode && 
 						app->scene->player->alive && 
 						alive &&
-						tey < physA->height + 4 + py) 
+						tey < physA->height + 4 + py)
 			{
 				app->scene->player->alive = false;
 				app->sceneIntro->Win = false;
 				app->sceneIntro->beforePlay = false;
 				app->fade->FadeToBlack(app->scene, (Module*)app->sceneIntro, 20);
 			}
+
 			break;
 		case ColliderType::TERRESTREENEMY:
 			if (direction == DIRECTION::RIGHT && state != STATE::ATTACKING)

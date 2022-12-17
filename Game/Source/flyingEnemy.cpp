@@ -1,5 +1,4 @@
 #include "flyingEnemy.h"
-#include "terrestreEnemy.h"
 #include "Player.h"
 #include "App.h"
 #include "Textures.h"
@@ -120,16 +119,17 @@ bool FlyingEnemy::Start() {
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 
-	febody = app->physics->CreateRectangle(initialPosition.x + 14, initialPosition.y + 6, 28,12, bodyType::DYNAMIC);
+	febody = app->physics->CreateRectangle(initialPosition.x + 6, initialPosition.y - 12, 12, 12, bodyType::DYNAMIC);
 	febody->listener = this;
-	febody->ctype = ColliderType::TERRESTREENEMY;
+	febody->ctype = ColliderType::FLYINGENEMY;
 	febody->body->SetFixedRotation(1);
 	app->map->enemies.Add(febody);
 
 	currentAnimation = &idleAnimation;
 
 	alive = true;
-	
+	febody->body->SetGravityScale(0);
+
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
 	attackState = chargingAttack;
@@ -148,7 +148,7 @@ bool FlyingEnemy::Update()
 	distanceVector = febody->body->GetPosition() - app->scene->player->getPbody()->body->GetPosition();
 	float distancePlayerFE = distanceVector.Length();
 
-	vel = febody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
+	vel = febody->body->GetLinearVelocity();// +b2Vec2(0, -GRAVITY_Y * 0.05);
 	float32 speed;
 	b2Vec2 force;
 
@@ -231,7 +231,7 @@ bool FlyingEnemy::Update()
 				{
 					direction = DIRECTION::LEFT;
 				}
-				if (app->physics->debug)
+				if (collisionWith != NULL && app->physics->debug)
 				{
 					//ray that is the PATH of the terrestre enemy 
 					app->render->DrawLine(	METERS_TO_PIXELS(febody->body->GetPosition().x),
@@ -279,6 +279,38 @@ bool FlyingEnemy::Update()
 				direction = DIRECTION::RIGHT;
 				currentAnimation = &walkRightAnimation;
 			}
+
+			if (abs(objective.y + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) - febody->body->GetPosition().y) <= PIXEL_TO_METERS(1))
+			{
+				direction = DIRECTION::LEFT;
+				vel.y = 0;
+				currentAnimation = &idleAnimation;
+			}
+			else if (objective.y + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= febody->body->GetPosition().y)
+			{
+				speed = 5.0f;
+				//move to left
+				force = { 0, -speed };
+				febody->body->ApplyForceToCenter(force, true);
+				if (vel.y < -3)
+				{
+					vel.y = -3;
+				}
+			}
+			else if (objective.y + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) > febody->body->GetPosition().y)
+			{
+				speed = 5.0f;
+				//move to left
+				force = { 0, speed };
+				febody->body->ApplyForceToCenter(force, true);
+				if (vel.y > 3)
+				{
+					vel.y = 3;
+				}
+			}
+
+
+
 			if (app->physics->debug)//ray that is the PATH of the terrestre enemy
 			{
 				app->render->DrawLine(	METERS_TO_PIXELS(febody->body->GetPosition().x),
@@ -301,15 +333,15 @@ bool FlyingEnemy::Update()
 				{
 					attackState = jumpAttack;
 				}
-				LOG("CHARGING ATTACK TE STATE");
+				LOG("CHARGING ATTACK FE STATE");
 				break;
 			case jumpAttack:
 
 				vel = b2Vec2(	(pbody->body->GetPosition().x - febody->body->GetPosition().x) * 3,
-								(pbody->body->GetPosition().y - febody->body->GetPosition().y) * 1.5f - 10);
+								(pbody->body->GetPosition().y - febody->body->GetPosition().y) * 3/*1.5f - 10*/);
 				//te jumps to bite the player
 				febody->body->ApplyLinearImpulse(vel, febody->body->GetPosition(), true);
-				LOG("JUMPING ATTACK TE STATE");
+				LOG("JUMPING ATTACK FE STATE");
 				chargingAttackTime = 0;
 				attackState = chargingAttack;
 				break;

@@ -6,26 +6,9 @@
 #include "Animation.h"
 #include "SDL/include/SDL.h"
 
-struct SDL_Texture;
+#include "terrestreEnemy.h"
 
-//enum class STATE
-//{
-//	NORMALPATH,
-//	AGRESSIVEPATH,
-//	ATTACKING,
-//	DYING
-//};
-//enum class DIRECTION
-//{
-//	LEFT,
-//	RIGHT
-//};
-//
-////ATTACKING STUFF
-//
-//#define chargingAttack true
-//#define jumpAttack false
-//#define chargingAttackTimeInSeconds 0.2f
+struct SDL_Texture;
 
 class FlyingEnemy : public Entity
 {

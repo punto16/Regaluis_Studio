@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "terrestreEnemy.h"
-//#include "flyingEnemy.h"
+#include "flyingEnemy.h"
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -101,7 +101,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::TERRESTREENEMY:
 		entity = new TerrestreEnemy(true);
 		break;
-
+	case EntityType::FLYINGENEMY:
+		entity = new FlyingEnemy(true);
+		break;
 	default: break;
 	}
 

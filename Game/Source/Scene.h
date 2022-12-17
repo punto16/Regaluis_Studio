@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "terrestreEnemy.h"
+#include "flyingEnemy.h"
 #include "Point.h"
 
 #define CAMERASPEED 5
@@ -49,6 +50,9 @@ public:
 
 	//terrestre enemies list
 	List<TerrestreEnemy*> terrestreEnemies;
+
+	//flying enemies list
+	List<FlyingEnemy*> flyingEnemies;
 
 	//ray
 	Point<int> ray;

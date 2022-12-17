@@ -74,6 +74,21 @@ bool Scene::Start()
 	}
 
 
+	//create flying enemy
+	configNode = app->LoadConfigFileToVar();
+	config = configNode.child(name.GetString());
+
+	for (pugi::xml_node itemNode = config.child("flyingEnemy"); itemNode; itemNode = itemNode.next_sibling("flyingEnemy"))
+	{
+		if (config.child("flyingEnemy").attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
+		{
+			FlyingEnemy* newFlyingEnemy = (FlyingEnemy*)app->entityManager->CreateEntity(EntityType::FLYINGENEMY);
+			newFlyingEnemy->parameters = itemNode;
+			flyingEnemies.Add(newFlyingEnemy);
+		}
+	}
+
+
 	//pathfinding stuff
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/path.png");
@@ -283,19 +298,19 @@ bool Scene::Update(float dt)
 	// Draw map
 	app->map->Draw();
 
-	//does pathfinding using coord of enemy and player
-	ListItem<PhysBody*>* enemyItem;
-	enemyItem = app->map->enemies.start;
+	//does pathfinding using coord of TERRESTRE enemy and player
+	//ListItem<PhysBody*>* enemyItem;
+	//enemyItem = app->map->enemies.start;
 
 	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
 
-	while (enemyItem != NULL)
+	while (terrestreEnemyItem != NULL)
 	{
 		if (terrestreEnemyItem != NULL && terrestreEnemyItem->data->state == STATE::AGRESSIVEPATH)
 		{
 			//origin = { enemyItem->data->body->GetPosition().x, enemyItem->data->body->GetPosition().x };//app->map->WorldToMap(enemyItem->data->body->GetPosition().x - app->render->camera.x * (float)1 / scale, enemyItem->data->body->GetPosition().y - app->render->camera.y * (float)1 / scale);
-			origin.x = enemyItem->data->body->GetPosition().x;
-			origin.y = enemyItem->data->body->GetPosition().y;
+			origin.x = terrestreEnemyItem->data->tebody->body->GetPosition().x;
+			origin.y = terrestreEnemyItem->data->tebody->body->GetPosition().y;
 			iPoint destination;// = { player->getPbody()->body->GetPosition().x, player->getPbody()->body->GetPosition().x };//app->map->WorldToMap(player->getPbody()->body->GetPosition().x - app->render->camera.x * (float)1 / scale, player->getPbody()->body->GetPosition().y - app->render->camera.y * (float)1 / scale);
 			destination.x = player->getPbody()->body->GetPosition().x;
 			destination.y = player->getPbody()->body->GetPosition().y;
@@ -318,8 +333,44 @@ bool Scene::Update(float dt)
 			iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
 			if (app->physics->debug) app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 		}
-		enemyItem = enemyItem->next;
 		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
+
+
+	//does pathfinding using coord of FLYING enemy and player
+
+	ListItem<FlyingEnemy*>* flyingEnemyItem = flyingEnemies.start;
+
+	while (flyingEnemyItem != NULL)
+	{
+		if (flyingEnemyItem != NULL && flyingEnemyItem->data->state == STATE::AGRESSIVEPATH)
+		{
+			//origin = { enemyItem->data->body->GetPosition().x, enemyItem->data->body->GetPosition().x };//app->map->WorldToMap(enemyItem->data->body->GetPosition().x - app->render->camera.x * (float)1 / scale, enemyItem->data->body->GetPosition().y - app->render->camera.y * (float)1 / scale);
+			origin.x = flyingEnemyItem->data->febody->body->GetPosition().x;
+			origin.y = flyingEnemyItem->data->febody->body->GetPosition().y;
+			iPoint destination;// = { player->getPbody()->body->GetPosition().x, player->getPbody()->body->GetPosition().x };//app->map->WorldToMap(player->getPbody()->body->GetPosition().x - app->render->camera.x * (float)1 / scale, player->getPbody()->body->GetPosition().y - app->render->camera.y * (float)1 / scale);
+			destination.x = player->getPbody()->body->GetPosition().x;
+			destination.y = player->getPbody()->body->GetPosition().y;
+			app->pathfinding->ClearLastPath();
+			app->pathfinding->CreatePath(origin, destination);
+			// L12: Get the latest calculated path and draw
+			const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+			for (uint i = 0; i < path->Count(); ++i)
+			{
+				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+				if (i == 1)
+				{
+					flyingEnemyItem->data->objective.x = PIXEL_TO_METERS(pos.x);
+					flyingEnemyItem->data->objective.y = PIXEL_TO_METERS(pos.y);
+				}
+				if (app->physics->debug) app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+			}
+
+			// L12: Debug pathfinding
+			iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+			if (app->physics->debug) app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+		}
+		flyingEnemyItem = flyingEnemyItem->next;
 	}
 
 	return true;
@@ -354,37 +405,27 @@ bool Scene::PostUpdate()
 
 	if (app->physics->debug)
 	{
-		ListItem<PhysBody*>* ItemListTE = app->map->enemies.start;
-		ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
-		PhysBody* tebody;
+		ListItem<PhysBody*>* enemiesItem = app->map->enemies.start;
+		PhysBody* ebody;
 		PhysBody* pbody = player->getPbody();
 		
 
-		while (ItemListTE != NULL)
+		while (enemiesItem != NULL)
 		{
-			tebody = ItemListTE->data;
+			ebody = enemiesItem->data;
 
-			if (ItemListTE->data->body->IsActive())
+			if (enemiesItem->data->body->IsActive())
 			{
 
 
 				//ray between terrestre enemy and player
-				app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
-										METERS_TO_PIXELS(tebody->body->GetPosition().y),
+				app->render->DrawLine(	METERS_TO_PIXELS(ebody->body->GetPosition().x),
+										METERS_TO_PIXELS(ebody->body->GetPosition().y),
 										METERS_TO_PIXELS(pbody->body->GetPosition().x),
 										METERS_TO_PIXELS(pbody->body->GetPosition().y),
 										255, 0, 0);//red
-
-				////ray that is the PATH of the terrestre enemy 
-				//app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
-				//						METERS_TO_PIXELS(tebody->body->GetPosition().y),
-				//						METERS_TO_PIXELS(terrestreEnemyItem->data->objective.x) + 16,
-				//						METERS_TO_PIXELS(tebody->body->GetPosition().y),
-				//						0, 255, 0); //green
 			}
-			
-			terrestreEnemyItem = terrestreEnemyItem->next;
-			ItemListTE = ItemListTE->next;
+			enemiesItem = enemiesItem->next;
 		}
 	}
 
@@ -396,10 +437,6 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	if (app->entityManager->IsEnabled())
-	{
-		app->entityManager->Disable();
-	}
 
 	app->fonts->UnLoad(blackFont);
 	app->fonts->UnLoad(whiteFont);
@@ -408,19 +445,31 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(mouseTileTex);
 	app->tex->UnLoad(originTex);
 
-
+	//clean up terrestre enemies
 	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
-
 	while (terrestreEnemyItem != NULL)
 	{
 		terrestreEnemyItem->data->CleanUp();
 		terrestreEnemyItem = terrestreEnemyItem->next;
 	}
-
 	terrestreEnemies.Clear();
+	//clean up flying enemies
+	ListItem<FlyingEnemy*>* flyingEnemyItem = flyingEnemies.start;
+	while (flyingEnemyItem != NULL)
+	{
+		flyingEnemyItem->data->CleanUp();
+		flyingEnemyItem = flyingEnemyItem->next;
+	}
+	flyingEnemies.Clear();
+
+
 	
 	app->map->CleanUp();
 
+	if (app->entityManager->IsEnabled())
+	{
+		app->entityManager->Disable();
+	}
 	return true;
 }
 
@@ -444,7 +493,6 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 
 	//te data
-
 	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
 	pugi::xml_node nodeTE = data.child("TerrestreEnemy");
 	
@@ -466,6 +514,30 @@ bool Scene::LoadState(pugi::xml_node& data)
 		terrestreEnemyItem->data->direction = (DIRECTION)nodeTE.attribute("DIRECTION").as_int();
 		nodeTE = nodeTE.next_sibling("TerrestreEnemy");
 		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
+
+	//fe data
+	ListItem<FlyingEnemy*>* flyingEnemyItem = flyingEnemies.start;
+	pugi::xml_node nodeFE = data.child("FlyingEnemy");
+
+	while (flyingEnemyItem != NULL)
+	{
+		flyingEnemyItem->data->febody->SetPosition(nodeFE.attribute("x").as_int(), nodeFE.attribute("y").as_int());
+		flyingEnemyItem->data->febody->body->SetLinearVelocity(b2Vec2(nodeFE.attribute("velx").as_int(), nodeFE.attribute("vely").as_int()));
+		flyingEnemyItem->data->state = (STATE)nodeFE.attribute("STATE").as_int();
+		if (flyingEnemyItem->data->state != STATE::DYING)
+		{
+			flyingEnemyItem->data->alive = true;
+			flyingEnemyItem->data->febody->body->SetActive(true);
+		}
+		else
+		{
+			flyingEnemyItem->data->alive = false;
+			flyingEnemyItem->data->febody->body->SetActive(false);
+		}
+		flyingEnemyItem->data->direction = (DIRECTION)nodeFE.attribute("DIRECTION").as_int();
+		nodeFE = nodeFE.next_sibling("TerrestreEnemy");
+		flyingEnemyItem = flyingEnemyItem->next;
 	}
 
 	return true;
@@ -498,7 +570,6 @@ bool Scene::SaveState(pugi::xml_node& data)
 	playerNode.append_attribute("jumpsRemaining") = (player->jumpsRemaining);
 
 	//terrestre enemies data
-
 	ListItem<TerrestreEnemy*>* terrestreEnemyItem = terrestreEnemies.start;
 
 	while (terrestreEnemyItem != NULL)
@@ -519,6 +590,29 @@ bool Scene::SaveState(pugi::xml_node& data)
 		teNode.append_attribute("DIRECTION") = (int)terrestreEnemyItem->data->direction;
 
 		terrestreEnemyItem = terrestreEnemyItem->next;
+	}
+
+	//flying enemies data
+	ListItem<FlyingEnemy*>* flyingEnemyItem = flyingEnemies.start;
+
+	while (flyingEnemyItem != NULL)
+	{
+		pugi::xml_node feNode = data.append_child("FlyingEnemy");
+		feNode.append_attribute("x") = (flyingEnemyItem->data->position.x + 16);
+		feNode.append_attribute("y") = (flyingEnemyItem->data->position.y + 16);
+		if (abs(flyingEnemyItem->data->febody->body->GetLinearVelocity().x) < 0.5)
+		{
+			feNode.append_attribute("velx") = (0);
+		}
+		else
+		{
+			feNode.append_attribute("velx") = (flyingEnemyItem->data->febody->body->GetLinearVelocity().x);
+		}
+		feNode.append_attribute("vely") = (flyingEnemyItem->data->febody->body->GetLinearVelocity().y);
+		feNode.append_attribute("STATE") = (int)flyingEnemyItem->data->state;
+		feNode.append_attribute("DIRECTION") = (int)flyingEnemyItem->data->direction;
+
+		flyingEnemyItem = flyingEnemyItem->next;
 	}
 
 

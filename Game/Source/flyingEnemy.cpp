@@ -420,12 +420,12 @@ void FlyingEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::FLYINGENEMY)
 	{
-		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
-			physB->ctype == ColliderType::WALL)
-		{
-			collisionWith = physB;
-			collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
-		}
+		//if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
+		//	physB->ctype == ColliderType::WALL)
+		//{
+		//	collisionWith = physB;
+		//	collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
+		//}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:

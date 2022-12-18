@@ -37,8 +37,9 @@ public:
 
 	STATE state;
 	DIRECTION direction;
-	bool attackState;
+	AttackState attackState;
 	int chargingAttackTime;
+	int recoverAttackTime;
 	iPoint objective;
 
 	bool alive;

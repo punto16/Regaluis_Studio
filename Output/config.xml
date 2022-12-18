@@ -58,9 +58,12 @@
 			</deadAnim>
 		</player>
 		<terrestreEnemy x="500" y="672" level="1" texturepath="Assets/Textures/cocodrileEnemy.png">
-			<idleAnim>
+			<idleAnimLeft>
 				<pushback x="0" y="0" w="32" h="32"/>
-			</idleAnim>
+			</idleAnimLeft>
+			<idleAnimRight>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</idleAnimRight>
 			<walkLeftAnim speed="0.1f" loop="true">
 				<pushback x="32" y="0" w="32" h="32"/>
 				<pushback x="64" y="0" w="32" h="32"/>
@@ -96,9 +99,12 @@
 			</deadAnim>
 		</terrestreEnemy>
 		<terrestreEnemy x="400" y="500" level="1" texturepath="Assets/Textures/cocodrileEnemy.png">
-			<idleAnim>
+			<idleAnimLeft>
 				<pushback x="0" y="0" w="32" h="32"/>
-			</idleAnim>
+			</idleAnimLeft>
+			<idleAnimRight>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</idleAnimRight>
 			<walkLeftAnim speed="0.1f" loop="true">
 				<pushback x="32" y="0" w="32" h="32"/>
 				<pushback x="64" y="0" w="32" h="32"/>

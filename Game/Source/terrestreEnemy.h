@@ -23,9 +23,15 @@ enum class DIRECTION
 
 //ATTACKING STUFF
 
-#define chargingAttack true
-#define jumpAttack false
-#define chargingAttackTimeInSeconds 0.2f
+enum class AttackState
+{
+	CHARGINGATTACK,
+	JUMPINGATTACK,
+	RECOVERINGATTACK
+};
+
+#define chargingAttackTimeInSeconds 2.0f
+#define recoverAttackTimeInSeconds 0.2f
 
 class TerrestreEnemy : public Entity
 {
@@ -54,8 +60,9 @@ public:
 
 	STATE state;
 	DIRECTION direction;
-	bool attackState;
+	AttackState attackState;
 	int chargingAttackTime;
+	int recoverAttackTime;
 	iPoint objective;
 
 	bool alive;
@@ -70,7 +77,8 @@ private:
 
 	//animations
 	Animation* currentAnimation = nullptr;
-	Animation idleAnimation;
+	Animation idleAnimationLeft;
+	Animation idleAnimationRight;
 	Animation walkRightAnimation;
 	Animation walkLeftAnimation;
 	Animation attackRightAnimation;

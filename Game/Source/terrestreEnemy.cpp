@@ -28,16 +28,28 @@ bool TerrestreEnemy::Awake() {
 	initialPosition.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
-	//idle anim
-	if (idleAnimation.GetTotalFrames() == 0)
+	//idle anim right
+	if (idleAnimationRight.GetTotalFrames() == 0)
 	{
-		for (pugi::xml_node nodePlayer = parameters.child("idleAnim").child("pushback");
+		for (pugi::xml_node nodePlayer = parameters.child("idleAnimRight").child("pushback");
 			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
 		{
-			idleAnimation.PushBack({	nodePlayer.attribute("x").as_int(),
-										nodePlayer.attribute("y").as_int(),
-										nodePlayer.attribute("w").as_int(),
-										nodePlayer.attribute("h").as_int() });
+			idleAnimationRight.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
+		}
+	}
+	//idle anim left
+	if (idleAnimationLeft.GetTotalFrames() == 0)
+	{
+		for (pugi::xml_node nodePlayer = parameters.child("idleAnimLeft").child("pushback");
+			nodePlayer; nodePlayer = nodePlayer.next_sibling("pushback"))
+		{
+			idleAnimationLeft.PushBack({	nodePlayer.attribute("x").as_int(),
+											nodePlayer.attribute("y").as_int(),
+											nodePlayer.attribute("w").as_int(),
+											nodePlayer.attribute("h").as_int() });
 		}
 	}
 	//walk left anim
@@ -115,7 +127,7 @@ bool TerrestreEnemy::Awake() {
 bool TerrestreEnemy::Start() {
 
 	texture = app->tex->Load(texturePath);
-	currentAnimation = &idleAnimation;
+	currentAnimation = &idleAnimationLeft;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 
@@ -125,14 +137,13 @@ bool TerrestreEnemy::Start() {
 	tebody->body->SetFixedRotation(1);
 	app->map->enemies.Add(tebody);
 
-	currentAnimation = &idleAnimation;
-
 	alive = true;
 	
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
-	attackState = chargingAttack;
+	attackState = AttackState::CHARGINGATTACK;
 	chargingAttackTime = 0;
+	recoverAttackTime = 0;
 
 	position.x = initialPosition.x;
 	position.y = initialPosition.y;
@@ -230,7 +241,7 @@ bool TerrestreEnemy::Update()
 				{
 					direction = DIRECTION::LEFT;
 				}
-				if (app->physics->debug)
+				if (collisionWith != NULL && app->physics->debug)
 				{
 					//ray that is the PATH of the terrestre enemy 
 					app->render->DrawLine(	METERS_TO_PIXELS(tebody->body->GetPosition().x),
@@ -250,7 +261,7 @@ bool TerrestreEnemy::Update()
 			{
 				direction = DIRECTION::LEFT;
 				vel.x = 0;
-				currentAnimation = &idleAnimation;
+				currentAnimation = &idleAnimationLeft;
 			}
 			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= tebody->body->GetPosition().x)
 			{
@@ -288,34 +299,39 @@ bool TerrestreEnemy::Update()
 			}
 			break;
 		case STATE::ATTACKING:
-			//the idea is that the te wont move for some frames (loading the attack), he will take the coords of the player when he starts loading, then he will have a force applied as a vector of the position of the te
-			// with respect the first coords taken of the player and do a jump to there.
 
 			switch (attackState)
 			{
-			case chargingAttack:
-				//vel.x = 0;
+			case AttackState::CHARGINGATTACK:
+				vel.x = 0;
 				chargingAttackTime++;
-				if ((float)(chargingAttackTime * 1 / 60) >= (float)chargingAttackTimeInSeconds)//if it has loaded for 2 seconds it changes attack state
+				if ((float)(chargingAttackTime) >= (float)chargingAttackTimeInSeconds * 60)//if it has loaded for 2 seconds it changes attack state
 				{
-					attackState = jumpAttack;
+					attackState = AttackState::JUMPINGATTACK;
 				}
 				LOG("CHARGING ATTACK TE STATE");
 				break;
-			case jumpAttack:
-
+				break;
+			case AttackState::JUMPINGATTACK:
 				vel = b2Vec2(	(pbody->body->GetPosition().x - tebody->body->GetPosition().x) * 3,
 								(pbody->body->GetPosition().y - tebody->body->GetPosition().y) * 1.5f - 10);
 				//te jumps to bite the player
 				tebody->body->ApplyLinearImpulse(vel, tebody->body->GetPosition(), true);
 				LOG("JUMPING ATTACK TE STATE");
 				chargingAttackTime = 0;
-				attackState = chargingAttack;
+				attackState = AttackState::RECOVERINGATTACK;
+				break;
+			case AttackState::RECOVERINGATTACK:
+				recoverAttackTime++;
+				if ((float)(recoverAttackTime) >= (float)recoverAttackTimeInSeconds * 60)//if it has loaded for 2 seconds it changes attack state
+				{
+					recoverAttackTime = 0;
+					attackState = AttackState::CHARGINGATTACK;
+				}
 				break;
 			default:
 				break;
 			}
-
 
 			if (pbody->body->GetPosition().x < tebody->body->GetPosition().x)
 			{
@@ -329,10 +345,24 @@ bool TerrestreEnemy::Update()
 			switch (direction)
 			{
 			case DIRECTION::LEFT:
-				currentAnimation = &attackLeftAnimation;
+				if (attackState != AttackState::CHARGINGATTACK)
+				{
+					currentAnimation = &attackLeftAnimation;
+				}
+				else
+				{
+					currentAnimation = &idleAnimationLeft;
+				}
 				break;
 			case DIRECTION::RIGHT:
-				currentAnimation = &attackRightAnimation;
+				if (attackState != AttackState::CHARGINGATTACK)
+				{
+					currentAnimation = &attackRightAnimation;
+				}
+				else
+				{
+					currentAnimation = &idleAnimationRight;
+				}
 				break;
 			default:
 				break;
@@ -349,7 +379,9 @@ bool TerrestreEnemy::Update()
 		}
 		if (state != STATE::ATTACKING)
 		{
+			attackState = AttackState::CHARGINGATTACK;
 			chargingAttackTime = 0;
+			recoverAttackTime = 0;
 		}
 
 		tebody->body->SetLinearVelocity(vel);
@@ -378,14 +410,6 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::TERRESTREENEMY)
 	{
-		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
-			physB->ctype == ColliderType::WALL) {
-			collisionWith = physB;
-			if (attackState == jumpAttack)
-			{
-				attackState = chargingAttack;
-			}
-		}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:

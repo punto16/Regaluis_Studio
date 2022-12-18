@@ -132,7 +132,7 @@ bool FlyingEnemy::Start() {
 
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
-	attackState = chargingAttack;
+	attackState = AttackState::CHARGINGATTACK;
 	chargingAttackTime = 0;
 
 	position.x = initialPosition.x;
@@ -187,10 +187,7 @@ bool FlyingEnemy::Update()
 		switch (state)
 		{
 		case STATE::NORMALPATH:
-			//TO IMPLEMENT NORMAL PATH THE IDEA IS -> TAKE THE CLOSER WALL OR PLATFORM COLLIDER -> COMPARE THIS COLLIDER X WITH TE X, AND THEN, MOVE LEFT OR RIGHT.
-			//ANOTHER IDEA IS TO IMPLEMENT MODULE PATHS FROM LAST YEAR PROJECT 1
-
-
+			vel.y = 0;
 
 			switch (direction)
 			{
@@ -203,17 +200,13 @@ bool FlyingEnemy::Update()
 				{
 					vel.x = -1.5f;
 				}
-				if (collisionWith != NULL && collisionWithPosition.x + 5 > position.x)
-				{
-					direction = DIRECTION::RIGHT;
-				}
 				currentAnimation = &walkLeftAnimation;
 				if (app->physics->debug)
 				{
 					//ray that is the PATH of the terrestre enemy 
 					app->render->DrawLine(	METERS_TO_PIXELS(febody->body->GetPosition().x),
 											METERS_TO_PIXELS(febody->body->GetPosition().y),
-											collisionWithPosition.x,
+											0,
 											METERS_TO_PIXELS(febody->body->GetPosition().y),
 											0, 255, 0); //green
 				}
@@ -236,7 +229,7 @@ bool FlyingEnemy::Update()
 					//ray that is the PATH of the terrestre enemy 
 					app->render->DrawLine(	METERS_TO_PIXELS(febody->body->GetPosition().x),
 											METERS_TO_PIXELS(febody->body->GetPosition().y),
-											collisionWithPosition.x + collisionWith->width * 2,
+											app->map->mapData.width * app->map->mapData.tileWidth,
 											METERS_TO_PIXELS(febody->body->GetPosition().y),
 											0, 255, 0); //green
 				}
@@ -251,7 +244,6 @@ bool FlyingEnemy::Update()
 			{
 				direction = DIRECTION::LEFT;
 				vel.x = 0;
-				currentAnimation = &idleAnimation;
 			}
 			else if (objective.x + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= febody->body->GetPosition().x)
 			{
@@ -284,7 +276,6 @@ bool FlyingEnemy::Update()
 			{
 				direction = DIRECTION::LEFT;
 				vel.y = 0;
-				currentAnimation = &idleAnimation;
 			}
 			else if (objective.y + PIXEL_TO_METERS(app->map->mapData.tileWidth / 2) <= febody->body->GetPosition().y)
 			{
@@ -323,32 +314,49 @@ bool FlyingEnemy::Update()
 		case STATE::ATTACKING:
 			//the idea is that the te wont move for some frames (loading the attack), he will take the coords of the player when he starts loading, then he will have a force applied as a vector of the position of the te
 			// with respect the first coords taken of the player and do a jump to there.
-
+			
 			switch (attackState)
 			{
-			case chargingAttack:
-				//vel.x = 0;
+			case AttackState::CHARGINGATTACK:
+				vel.x = 0; vel.y = 0;
 				chargingAttackTime++;
-				if ((float)(chargingAttackTime * 1 / 60) >= (float)chargingAttackTimeInSeconds)//if it has loaded for 2 seconds it changes attack state
+				if ((float)(chargingAttackTime) >= (float)chargingAttackTimeInSeconds * 10)
 				{
-					attackState = jumpAttack;
+					attackState = AttackState::JUMPINGATTACK;
 				}
 				LOG("CHARGING ATTACK FE STATE");
+				switch (direction)
+				{
+				case DIRECTION::LEFT:
+					currentAnimation = &walkLeftAnimation;
+					break;
+				case DIRECTION::RIGHT:
+					currentAnimation = &walkRightAnimation;
+					break;
+				default:
+					break;
+				}
 				break;
-			case jumpAttack:
-
-				vel = b2Vec2(	(pbody->body->GetPosition().x - febody->body->GetPosition().x) * 3,
-								(pbody->body->GetPosition().y - febody->body->GetPosition().y) * 3/*1.5f - 10*/);
+			case AttackState::JUMPINGATTACK:
+				vel = b2Vec2(	(pbody->body->GetPosition().x - febody->body->GetPosition().x) * 2,
+								(pbody->body->GetPosition().y - febody->body->GetPosition().y) * 2);
 				//te jumps to bite the player
 				febody->body->ApplyLinearImpulse(vel, febody->body->GetPosition(), true);
 				LOG("JUMPING ATTACK FE STATE");
 				chargingAttackTime = 0;
-				attackState = chargingAttack;
+				attackState = AttackState::RECOVERINGATTACK;
+				break;
+			case AttackState::RECOVERINGATTACK:
+				recoverAttackTime++;
+				if ((float)(recoverAttackTime) >= (float)recoverAttackTimeInSeconds * 60 * 2)//if it has loaded for 2 seconds it changes attack state
+				{
+					recoverAttackTime = 0;
+					attackState = AttackState::CHARGINGATTACK;
+				}
 				break;
 			default:
 				break;
 			}
-
 
 			if (pbody->body->GetPosition().x < febody->body->GetPosition().x)
 			{
@@ -358,17 +366,20 @@ bool FlyingEnemy::Update()
 			{
 				direction = DIRECTION::RIGHT;
 			}
-
-			switch (direction)
+			if (attackState != AttackState::CHARGINGATTACK)
 			{
-			case DIRECTION::LEFT:
-				currentAnimation = &attackLeftAnimation;
-				break;
-			case DIRECTION::RIGHT:
-				currentAnimation = &attackRightAnimation;
-				break;
-			default:
-				break;
+
+				switch (direction)
+				{
+				case DIRECTION::LEFT:
+					currentAnimation = &attackLeftAnimation;
+					break;
+				case DIRECTION::RIGHT:
+					currentAnimation = &attackRightAnimation;
+					break;
+				default:
+					break;
+				}
 			}
 			break;
 		case STATE::DYING:
@@ -382,7 +393,9 @@ bool FlyingEnemy::Update()
 		}
 		if (state != STATE::ATTACKING)
 		{
+			attackState = AttackState::CHARGINGATTACK;
 			chargingAttackTime = 0;
+			recoverAttackTime = 0;
 		}
 
 		febody->body->SetLinearVelocity(vel);
@@ -411,14 +424,6 @@ void FlyingEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::FLYINGENEMY)
 	{
-		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
-			physB->ctype == ColliderType::WALL) {
-			collisionWith = physB;
-			if (attackState == jumpAttack)
-			{
-				attackState = chargingAttack;
-			}
-		}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:
@@ -428,6 +433,14 @@ void FlyingEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			LOG("FLYING ENEMY Collision PLATFORM");
 			break;
 		case ColliderType::WALL:
+			if (direction == DIRECTION::RIGHT)
+			{
+				direction = DIRECTION::LEFT;
+			}
+			else
+			{
+				direction = DIRECTION::RIGHT;
+			}
 			LOG("FLYING ENEMY Collision Wall");
 			break;
 		case ColliderType::WATER:

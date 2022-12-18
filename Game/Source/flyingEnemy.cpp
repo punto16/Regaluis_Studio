@@ -126,9 +126,11 @@ bool FlyingEnemy::Start() {
 	app->map->enemies.Add(febody);
 
 	currentAnimation = &idleAnimation;
+	collisionWith = NULL;
 
 	alive = true;
 	febody->body->SetGravityScale(0);
+	collisionWithPosition = { 0,0 };
 
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
@@ -151,12 +153,6 @@ bool FlyingEnemy::Update()
 	vel = febody->body->GetLinearVelocity();// +b2Vec2(0, -GRAVITY_Y * 0.05);
 	float32 speed;
 	b2Vec2 force;
-
-	iPoint collisionWithPosition;
-	if (collisionWith != NULL)
-	{
-		collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
-	}
 
 	if (!app->physics->pause)
 	{
@@ -415,7 +411,7 @@ bool FlyingEnemy::CleanUp()
 {
 	LOG("Cleanup of the flying enemy");
 	app->tex->UnLoad(texture);
-
+	collisionWith = NULL;
 	return true;
 }
 
@@ -424,6 +420,12 @@ void FlyingEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::FLYINGENEMY)
 	{
+		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
+			physB->ctype == ColliderType::WALL)
+		{
+			collisionWith = physB;
+			collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
+		}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:

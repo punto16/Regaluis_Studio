@@ -34,6 +34,7 @@ public:
 	//PhysBody* pendingToSetInactive;
 	PhysBody* febody;
 	PhysBody* collisionWith;
+	iPoint collisionWithPosition;
 
 	STATE state;
 	DIRECTION direction;

@@ -57,6 +57,7 @@ public:
 	//PhysBody* pendingToSetInactive;
 	PhysBody* tebody;
 	PhysBody* collisionWith;
+	iPoint collisionWithPosition;
 
 	STATE state;
 	DIRECTION direction;

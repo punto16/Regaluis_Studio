@@ -139,6 +139,8 @@ bool TerrestreEnemy::Start() {
 
 	alive = true;
 	
+	collisionWithPosition = { 0,0 };
+
 	state = STATE::NORMALPATH;
 	direction = DIRECTION::LEFT;
 	attackState = AttackState::CHARGINGATTACK;
@@ -161,12 +163,6 @@ bool TerrestreEnemy::Update()
 	vel = tebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.05);
 	float32 speed;
 	b2Vec2 force;
-
-	iPoint collisionWithPosition;
-	if (collisionWith != NULL)
-	{
-		collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
-	}
 
 	if (!app->physics->pause)
 	{
@@ -403,6 +399,7 @@ bool TerrestreEnemy::CleanUp()
 {
 	LOG("Cleanup of the terrestre enemy");
 	app->tex->UnLoad(texture);
+	collisionWith = NULL;
 
 	return true;
 }
@@ -416,6 +413,7 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 			physB->ctype == ColliderType::WALL)
 		{
 			collisionWith = physB;
+			collisionWith->GetPosition(collisionWithPosition.x, collisionWithPosition.y);
 		}
 		switch (physB->ctype)
 		{

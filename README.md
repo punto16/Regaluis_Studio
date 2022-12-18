@@ -21,10 +21,11 @@ The objective is to reach the end of the level.
  - + from NumPad to increase scale
  - - from NumPad to decrease scale
  - F1 to start from the 1st level
+ - F2 to start from the 2nd level
  - F3 to start from the beggining of the current level
  - F5 to save the current game state in in a xml file
  - F6 to load the state previously saved in the xml file
- - F9 to see the colliders
+ - F9 to see the colliders and enemy paths
  - F10 to go god mode (player can fly and can't die)
  - F11 to toggle FPS (30 FPS and 60 FPS)
  - ESC inside a level to go to the intro screen

@@ -65,7 +65,7 @@ bool Scene::Start()
 
 	for (pugi::xml_node itemNode = config.child("terrestreEnemy"); itemNode; itemNode = itemNode.next_sibling("terrestreEnemy"))
 	{
-		if (config.child("terrestreEnemy").attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
+		if (itemNode.attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
 		{
 			TerrestreEnemy* newTerrestreEnemy = (TerrestreEnemy*)app->entityManager->CreateEntity(EntityType::TERRESTREENEMY);
 			newTerrestreEnemy->parameters = itemNode;
@@ -80,7 +80,7 @@ bool Scene::Start()
 
 	for (pugi::xml_node itemNode = config.child("flyingEnemy"); itemNode; itemNode = itemNode.next_sibling("flyingEnemy"))
 	{
-		if (config.child("flyingEnemy").attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
+		if (itemNode.attribute("level").as_int() - 1 == app->sceneIntro->currentLevel)
 		{
 			FlyingEnemy* newFlyingEnemy = (FlyingEnemy*)app->entityManager->CreateEntity(EntityType::FLYINGENEMY);
 			newFlyingEnemy->parameters = itemNode;

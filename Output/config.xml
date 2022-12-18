@@ -139,7 +139,7 @@
 				<pushback x="192" y="96" w="32" h="32"/>
 			</deadAnim>
 		</terrestreEnemy>
-		<flyingEnemy x="400" y="500" level="2" texturepath="Assets/Textures/mosquitoEnemy.png">
+		<flyingEnemy x="1400" y="300" level="1" texturepath="Assets/Textures/mosquitoEnemy.png">
 			<idleAnim>
 				<pushback x="0" y="0" w="32" h="32"/>
 			</idleAnim>
@@ -165,6 +165,47 @@
 				<pushback x="160" y="0" w="32" h="32"/>
 			</deadAnim>
 		</flyingEnemy>
+		<terrestreEnemy x="400" y="672" level="2" texturepath="Assets/Textures/cocodrileEnemy.png">
+			<idleAnimLeft>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</idleAnimLeft>
+			<idleAnimRight>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</idleAnimRight>
+			<walkLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="0" w="32" h="32"/>
+				<pushback x="64" y="0" w="32" h="32"/>
+				<pushback x="96" y="0" w="32" h="32"/>
+				<pushback x="128" y="0" w="32" h="32"/>
+				<pushback x="160" y="0" w="32" h="32"/>
+				<pushback x="192" y="0" w="32" h="32"/>
+				<pushback x="0" y="0" w="32" h="32"/>
+			</walkLeftAnim>
+			<walkRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="64" w="32" h="32"/>
+				<pushback x="64" y="64" w="32" h="32"/>
+				<pushback x="96" y="64" w="32" h="32"/>
+				<pushback x="128" y="64" w="32" h="32"/>
+				<pushback x="160" y="64" w="32" h="32"/>
+				<pushback x="192" y="64" w="32" h="32"/>
+				<pushback x="0" y="64" w="32" h="32"/>
+			</walkRightAnim>
+			<attackLeftAnim speed="0.1f" loop="true">
+				<pushback x="32" y="32" w="32" h="32"/>
+				<pushback x="64" y="32" w="32" h="32"/>
+				<pushback x="96" y="32" w="32" h="32"/>
+				<pushback x="128" y="32" w="32" h="32"/>
+			</attackLeftAnim>
+			<attackRightAnim speed="0.1f" loop="true">
+				<pushback x="32" y="96" w="32" h="32"/>
+				<pushback x="64" y="96" w="32" h="32"/>
+				<pushback x="96" y="96" w="32" h="32"/>
+				<pushback x="128" y="96" w="32" h="32"/>
+			</attackRightAnim>
+			<deadAnim>
+				<pushback x="192" y="96" w="32" h="32"/>
+			</deadAnim>
+		</terrestreEnemy>
 		<map>
 			<mapfolder path="Assets/Maps/"/>
 			<mapfile path="Assets/Maps/Level1.tmx"/>

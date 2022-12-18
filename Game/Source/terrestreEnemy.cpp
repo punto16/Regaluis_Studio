@@ -305,7 +305,7 @@ bool TerrestreEnemy::Update()
 			case AttackState::CHARGINGATTACK:
 				vel.x = 0;
 				chargingAttackTime++;
-				if ((float)(chargingAttackTime) >= (float)chargingAttackTimeInSeconds * 60)//if it has loaded for 2 seconds it changes attack state
+				if ((float)(chargingAttackTime) >= (float)chargingAttackTimeInSeconds * 20)//if it has loaded for 2 seconds it changes attack state
 				{
 					attackState = AttackState::JUMPINGATTACK;
 				}
@@ -323,7 +323,7 @@ bool TerrestreEnemy::Update()
 				break;
 			case AttackState::RECOVERINGATTACK:
 				recoverAttackTime++;
-				if ((float)(recoverAttackTime) >= (float)recoverAttackTimeInSeconds * 60)//if it has loaded for 2 seconds it changes attack state
+				if ((float)(recoverAttackTime) >= (float)recoverAttackTimeInSeconds * 60 * 2)//if it has loaded for 2 seconds it changes attack state
 				{
 					recoverAttackTime = 0;
 					attackState = AttackState::CHARGINGATTACK;
@@ -352,6 +352,7 @@ bool TerrestreEnemy::Update()
 				else
 				{
 					currentAnimation = &idleAnimationLeft;
+					attackLeftAnimation.Reset();
 				}
 				break;
 			case DIRECTION::RIGHT:
@@ -362,6 +363,7 @@ bool TerrestreEnemy::Update()
 				else
 				{
 					currentAnimation = &idleAnimationRight;
+					attackRightAnimation.Reset();
 				}
 				break;
 			default:

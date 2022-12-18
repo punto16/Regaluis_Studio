@@ -412,6 +412,11 @@ void TerrestreEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physA->ctype == ColliderType::TERRESTREENEMY)
 	{
+		if (physB->ctype == ColliderType::FLOATINGTERRAIN ||
+			physB->ctype == ColliderType::WALL)
+		{
+			collisionWith = physB;
+		}
 		switch (physB->ctype)
 		{
 		case ColliderType::ITEM:

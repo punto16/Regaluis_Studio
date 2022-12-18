@@ -307,7 +307,7 @@ bool FlyingEnemy::Update()
 				app->render->DrawLine(	METERS_TO_PIXELS(febody->body->GetPosition().x),
 										METERS_TO_PIXELS(febody->body->GetPosition().y),
 										METERS_TO_PIXELS(objective.x) + 16,
-										METERS_TO_PIXELS(febody->body->GetPosition().y),
+										METERS_TO_PIXELS(objective.y) + 16,
 										0, 255, 0); //green
 			}
 			break;
